@@ -17,9 +17,9 @@ parser.add_argument("-s","--share", default=False, help="register results with s
 parser.add_argument("-v","--verbose", default=False, help="spend speedteset results json to console", action="store_true")
 args = parser.parse_args()
 if (args.upload):
-    print("upload enabled")
+    print("NetCheck:","upload enabled")
 if (args.download):
-    print("download enabled")
+    print("NetCheck:","download enabled")
 
 #---------------------------------------------------
 # Actual speed test
@@ -35,23 +35,23 @@ def run_test(should_download, should_upload):
 
     # geeting the servers does a ping
     s = speedtest.Speedtest() 
-    print("getting servers")
+    print("NetCheck:","getting servers")
     s.get_servers(servers)
     s.get_best_server()
 
     if (args.download) : 
-        print("running download test")
+        print("NetCheck:","running download test")
         s.download(threads=threads)
     else :
-        print("skipping download test")
+        print("NetCheck:","skipping download test")
 
     if (args.upload) :
-        print("running upload test")
+        print("NetCheck:","running upload test")
         s.upload(threads=threads)
     else :
-        print("skipping upload test")
+        print("NetCheck:","skipping upload test")
     if (args.share) :
-        print("sharing results")
+        print("NetCheck:","sharing results")
         s.results.share()
     return s.results
 
@@ -62,19 +62,19 @@ def run_test(should_download, should_upload):
 # It can't tell you if the file already existed so we write header every time 
 def write_csv(results,outfile):
     if (outfile):
-        print("writing to file")
+        print("NetCheck:","writing to file")
         outfile.write(results.csv_header())
         outfile.write("\n")
         outfile.write(results.csv())
         outfile.write("\n")
         outfile.close()
     else:
-        print("no file output requested")
+        print("NetCheck:","no file output requested")
 
 # This has the advantage of not requiring a header row and is self describing
 def write_json(results,outfile):
     if (outfile):
-        print("writing to file")
+        print("NetCheck:","writing to file")
         # formatting works on dict, not a string
         results_json = json.dumps(results.dict(), sort_keys=True)
         outfile.write(results_json)
@@ -82,7 +82,7 @@ def write_json(results,outfile):
         outfile.close()
         return results_json
     else:
-        print("no file output requested")
+        print("NetCheck:","no file output requested")
         return "{}"
 
 
@@ -100,11 +100,11 @@ record_speedtest(results.dict())
 # for testing
 #---------------------------------------------------
 if (args.verbose) :
-    #print("\nas dictionary")
-    #print(results.dict())
-    print("\nas json string")
-    print(json.dumps(results.json()))
-    print( json.dumps(results.dict(), indent=2, sort_keys=True))
-    # print("\nas csv")
-    # print(results.csv_header())
-    # print(results.csv())
+    #print("NetCheck:","\nas dictionary")
+    #print("NetCheck:",results.dict())
+    print("NetCheck:","\nas json string")
+    print("NetCheck:",json.dumps(results.json()))
+    print("NetCheck:", json.dumps(results.dict(), indent=2, sort_keys=True))
+    # print("NetCheck:","\nas csv")
+    # print("NetCheck:",results.csv_header())
+    # print("NetCheck:",results.csv())
