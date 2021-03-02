@@ -3,6 +3,7 @@
 from datetime import datetime
 import json
 import configparser
+import os
 from opencensus.stats import aggregation as aggregation_module
 from opencensus.stats import measure as measure_module
 from opencensus.stats import stats as stats_module
@@ -12,6 +13,8 @@ from opencensus.tags import tag_map as tag_map_module
 from opencensus.tags import tag_value as tag_value_module
 from opencensus.ext.azure import metrics_exporter
 
+log_prefix = os.path.basename(__file__) + ":"
+
 # sample speedtest.net output json as a string
 sample_string = "{\"download\": 93579659.45913646, \"upload\": 94187295.64264823, \"ping\": 40.125, \"server\": {\"url\": \"http://speedtest.red5g.com:8080/speedtest/upload.php\", \"lat\": \"38.9047\", \"lon\": \"-77.0164\", \"name\": \"Washington, DC\", \"country\": \"United States\", \"cc\": \"US\", \"sponsor\": \"red5g.com\", \"id\": \"30471\", \"host\": \"speedtest.red5g.com:8080\", \"d\": 23.71681279068988, \"latency\": 9.125}, \"timestamp\": \"2021-03-01T13:18:16.460145Z\", \"bytes_sent\": 117825536, \"bytes_received\": 117376482, \"share\": null, \"client\": {\"ip\": \"108.48.69.33\", \"lat\": \"39.0828\", \"lon\": \"-77.1674\", \"isp\": \"Verizon Fios\", \"isprating\": \"3.7\", \"rating\": \"0\", \"ispdlavg\": \"0\", \"ispulavg\": \"0\", \"loggedin\": \"0\", \"country\": \"US\"}}"
 
@@ -20,7 +23,7 @@ def load_insights_key():
     config = configparser.ConfigParser()
     config.read('config.ini')
     config['azure']
-    #print(""AppInsights: ",", config['azure']['azure_instrumentation_key'])
+    #print(log_prefix, config['azure']['azure_instrumentation_key'])
     return config['azure']['azure_instrumentation_key']
 
 def register_azure_metrics(view_manager, azure_connection_string):
@@ -51,7 +54,7 @@ def record_metric_float(mmap,value,measure):
     # data from the speed test
     mmap.measure_float_put(measure,value)
     # the measure becomes the key to the measurement map
-    print("AppInsights: ","metrics: ",measure.name, "measure:", measure, "measurement map:",mmap.measurement_map)
+    print(log_prefix,"metrics: ",measure.name, "measure:", measure, "measurement map:",mmap.measurement_map)
 
 def make_view_float(view_manager, name, description, measure):
     # view must be registered prior to record
@@ -86,11 +89,11 @@ def record_speedtest(json_data):
     if (json_data['upload'] != 0):
         record_metric_float(mmap, json_data['upload'], upload_measure)
     else:
-        print("AppInsights: ","ignoring empty upload stats")
+        print(log_prefix,"no upload stats to report")
     if (json_data['download']!=0):
         record_metric_float(mmap, json_data['download'], download_measure)
     else:
-        print("AppInsights: ","ignoring empty download stats")
+        print(log_prefix,"no download stats to report")
 
     # record the metrics
     # this will throw a 400 if the instrumentation key isn't set
@@ -104,7 +107,7 @@ def main():
 
     # manual visual verification
     metrics = list(mmap.measure_to_view_map.get_metrics(datetime.utcnow()))
-    print("AppInsights: ","first metric", metrics[0].time_series[0].points[0])
+    print(log_prefix,"first metric", metrics[0].time_series[0].points[0])
 
 if __name__ == "__main__":
     main()
