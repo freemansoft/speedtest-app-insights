@@ -1,0 +1,34 @@
+{
+    "bytes_received": 117376482,
+    "bytes_sent": 117825536,
+    "client": {
+        "country": "US",
+        "ip": "108.48.69.33",
+        "isp": "Verizon Fios",
+        "ispdlavg": "0",
+        "isprating": "3.7",
+        "ispulavg": "0",
+        "lat": "39.0828",
+        "loggedin": "0",
+        "lon": "-77.1674",
+        "rating": "0"
+    },
+    "download": 93579659.45913646,
+    "ping": 9.125,
+    "server": {
+        "cc": "US",
+        "country": "United States",
+        "d": 23.71681279068988,
+        "host": "speedtest.red5g.com:8080",
+        "id": "30471",
+        "lat": "38.9047",
+        "latency": 9.125,
+        "lon": "-77.0164",
+        "name": "Washington, DC",
+        "sponsor": "red5g.com",
+        "url": "http://speedtest.red5g.com:8080/speedtest/upload.php"
+    },
+    "share": null,
+    "timestamp": "2021-03-01T13:18:16.460145Z",
+    "upload": 94187295.64264823
+}

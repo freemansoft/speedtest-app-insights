@@ -1,0 +1,34 @@
+{
+    "bytes_received": 0,
+    "bytes_sent": 0,
+    "client": {
+        "country": "US",
+        "ip": "50.81.22.241",
+        "isp": "Mediacom Cable",
+        "ispdlavg": "0",
+        "isprating": "3.7",
+        "ispulavg": "0",
+        "lat": "38.531",
+        "loggedin": "0",
+        "lon": "-75.0674",
+        "rating": "0"
+    },
+    "download": 0,
+    "ping": 44.49,
+    "server": {
+        "cc": "US",
+        "country": "United States",
+        "d": 1000.5074790022076,
+        "host": "speedcheck.blomand.net:8080",
+        "id": "11404",
+        "lat": "35.6866",
+        "latency": 44.49,
+        "lon": "-85.7801",
+        "name": "McMinnville, TN",
+        "sponsor": "Ben Lomand Telephone",
+        "url": "http://speedcheck.blomand.net:8080/speedtest/upload.php"
+    },
+    "share": null,
+    "timestamp": "2021-02-28T15:06:36.319766Z",
+    "upload": 0
+}
