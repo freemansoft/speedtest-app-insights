@@ -1,7 +1,7 @@
 from aiy.board import Board, Led
 import time
 import sys
-# Google AIY Voice Hat flash
+# Google AIY Voice Hat flash - Raspberry pi
 
 # configure python
 # sudo apt-get update

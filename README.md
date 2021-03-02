@@ -9,8 +9,10 @@ The intention is to
 1. Copy config.ini.template to config.ini
 1. Register in Application Insights to get a key
 1. Replace the dummy key in config.ini with yoru new key
-1. Run with only a ping check `python3 NetCheck.py `
-1. Run with ping, upload and download `python3 NetCheck.py --download --upload`
+1. Run `NetCheck.py`
+  1. Run with only a ping check `python3 NetCheck.py `
+  1. Run with ping, upload and download `python3 NetCheck.py --download --upload`
+  1. Get help with `NetCheck.py --help`
 
 ## Example speedtest.net cli output
 Raspberry Pi3 on 1GB port on 1GB FIOS internet service. A Raspberry Pi3 seems to have a max ethernet speed of 100Mbit/s
@@ -33,9 +35,11 @@ Packet Loss:     0.0%
 * https://github.com/sivel/speedtest-cli
 * https://docs.microsoft.com/en-us/azure/azure-monitor/app/opencensus-python
 * https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource
+* https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure
 
 ## Scripts
 | Script | Purpose |
 | - | - |
 | setup.sh | downloads the Speedtest.net CLI, configures Python |
-| AppInsights | ?? | 
+| NetCheck.py | Program that runs the speedtest-cli and records metrics |
+| AppInsights.py | OpenCensus library wrapper used to send metrics to Azure Application Insights | 
