@@ -17,18 +17,35 @@ The intention is to
 ## Example speedtest.net cli output
 Raspberry Pi3 on 1GB port on 1GB FIOS internet service. A Raspberry Pi3 seems to have a max ethernet speed of 100Mbit/s
 
+### speedtest installed as part of apt package
+Installed in /usr/bin
 ```
-pi@pi-52863f1:~/Documents/RaspberryPi $ speedtest NetCheck --download --upload
+pi@pi-52863f1:~/Documents/speedtest-app-insights $  /usr/bin/speedtest
 
    Speedtest by Ookla
 
      Server: Windstream - Ashburn, VA (id = 17383)
         ISP: Verizon Fios
-    Latency:     4.46 ms   (1.35 ms jitter)
-   Download:    95.44 Mbps (data used: 61.2 MB)
-     Upload:    93.90 Mbps (data used: 42.3 MB)
+    Latency:     4.04 ms   (0.04 ms jitter)
+   Download:    94.19 Mbps (data used: 42.4 MB)                               
+     Upload:    93.90 Mbps (data used: 42.3 MB)                               
 Packet Loss:     0.0%
- Result URL: https://www.speedtest.net/result/c/6e405b18-6135-4608-91a0-0da5e8e1cf58
+ Result URL: https://www.speedtest.net/result/c/dee19d27-1f5a-4cff-aa42-d8084a145b8f
+```
+
+### speedtest installed as part of speedtest-cli gitpull
+Installed in ~/.local/bin
+```
+$ speedtest
+Retrieving speedtest.net configuration...
+Testing from Verizon Fios (108.48.69.33)...
+Retrieving speedtest.net server list...
+Selecting best server based on ping...
+Hosted by PBW Communications, LLC (Herndon, VA) [22.70 km]: 8.306 ms
+Testing download speed................................................................................
+Download: 91.92 Mbit/s
+Testing upload speed......................................................................................................
+Upload: 93.90 Mbit/s
 ```
 
 ## References
