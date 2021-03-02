@@ -4,7 +4,7 @@ import speedtest
 import json
 # https://github.com/sivel/speedtest-cli
 #
-# do not name the file same as import - do not name speedtest.py
+# do not name local python file same as import file - do not name speedtest.py
 
 #--------------------------------------------------
 # determine options
@@ -13,6 +13,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-d","--download", default=False, help="include download metrics",action="store_true")
 parser.add_argument("-u","--upload", default=False, help="include upload metrics",action="store_true")
 parser.add_argument("-o","--outfile", type=argparse.FileType('wt'), help="write output to file as json")
+parser.add_argument("-s","--share", default=False, help="register results with speedtest", action="store_true" )
 parser.add_argument("-v","--verbose", default=False, help="spend speedteset results json to console", action="store_true")
 args = parser.parse_args()
 if (args.upload):
@@ -49,7 +50,9 @@ def run_test(should_download, should_upload):
         s.upload(threads=threads)
     else :
         print("skipping upload test")
-    #s.results.share()
+    if (args.share) :
+        print("sharing results")
+        s.results.share()
     return s.results
 
 #---------------------------------------------------

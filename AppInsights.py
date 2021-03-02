@@ -20,7 +20,7 @@ def load_insights_key():
     config = configparser.ConfigParser()
     config.read('config.ini')
     config['azure']
-    #print("hello", config['azure']['azure_instrumentation_key'])
+    #print(""AppInsights: ",", config['azure']['azure_instrumentation_key'])
     return config['azure']['azure_instrumentation_key']
 
 def register_azure_metrics(view_manager, azure_connection_string):
@@ -51,7 +51,7 @@ def record_metric_float(mmap,value,measure):
     # data from the speed test
     mmap.measure_float_put(measure,value)
     # the measure becomes the key to the measurement map
-    print("metrics: ",measure.name, "measure:", measure, "measurement map:",mmap.measurement_map)
+    print("AppInsights: ","metrics: ",measure.name, "measure:", measure, "measurement map:",mmap.measurement_map)
 
 def make_view_float(view_manager, name, description, measure):
     # view must be registered prior to record
@@ -86,11 +86,11 @@ def record_speedtest(json_data):
     if (json_data['upload'] != 0):
         record_metric_float(mmap, json_data['upload'], upload_measure)
     else:
-        print("ignoring empty upload stats")
+        print("AppInsights: ","ignoring empty upload stats")
     if (json_data['download']!=0):
         record_metric_float(mmap, json_data['download'], download_measure)
     else:
-        print("ignoring empty download stats")
+        print("AppInsights: ","ignoring empty download stats")
 
     # record the metrics
     # this will throw a 400 if the instrumentation key isn't set
@@ -104,7 +104,7 @@ def main():
 
     # manual visual verification
     metrics = list(mmap.measure_to_view_map.get_metrics(datetime.utcnow()))
-    print(metrics[0].time_series[0].points[0])
+    print("AppInsights: ","first metric", metrics[0].time_series[0].points[0])
 
 if __name__ == "__main__":
     main()
