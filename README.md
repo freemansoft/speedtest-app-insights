@@ -5,6 +5,16 @@ The intention is to
 1. Capture the current internet health with the `speedtest` CLI.
 1. Publish the results to an Azure Application Insights dashboard
 
+![Script Flow](./images/NetCheck-AppInsights.png)
+
+## Scripts
+| Script | Purpose |
+| - | - |
+| 0-setup.sh | downloads the Speedtest.net CLI, configures Python |
+| 1-install-crontab.sh | Installs a crontab entry that runs NetCheck.py on a regular basis |
+| NetCheck.py | Program that runs the speedtest-cli and records metrics |
+| AppInsights.py | OpenCensus library wrapper used to send metrics to Azure Application Insights | 
+
 ## Usage - NetCheck and Azure App Insights
 1. Run `0-setup.sh` to install dependencies
 1. Copy config.ini.template to config.ini
@@ -39,7 +49,7 @@ Packet Loss:     0.0%
  Result URL: https://www.speedtest.net/result/c/dee19d27-1f5a-4cff-aa42-d8084a145b8f
 ```
 
-### speedtest installed as part of speedtest-cli gitpull
+### speedtest installed as part of speedtest-cli github pull
 Installed in ~/.local/bin
 ```
 $ speedtest
@@ -60,14 +70,6 @@ Upload: 93.90 Mbit/s
 * https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource
 * https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure
     * https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents
-
-## Scripts
-| Script | Purpose |
-| - | - |
-| 0-setup.sh | downloads the Speedtest.net CLI, configures Python |
-| 1-install-crontab.sh | Installs a crontab entry that runs NetCheck.py on a regular basis |
-| NetCheck.py | Program that runs the speedtest-cli and records metrics |
-| AppInsights.py | OpenCensus library wrapper used to send metrics to Azure Application Insights | 
 
 ## Raspberry Pi Networking
 In my testing, the Raspberry Pi 3 hardwire Ethernet seems to max out about 94 Mbit/s. The Raspberry Pi speed should be sigficantly higher because its eithernet interface is part of the SoC instead of being USB attached like previous boards.
