@@ -72,8 +72,9 @@ Upload: 93.90 Mbit/s
     * https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents
 
 ## Raspberry Pi Networking
-In my testing, the Raspberry Pi 3 hardwire Ethernet seems to max out about 94 Mbit/s. The Raspberry Pi speed should be sigficantly higher because its eithernet interface is part of the SoC instead of being USB attached like previous boards.
+Some Raspberry Pi models are speed limited on their ethernet. magpi posted ethernet test results https://magpi.raspberrypi.org/articles/raspberry-pi-4-specs-benchmarks
 
+* In my testing, the Raspberry Pi 3 hardwire Ethernet seems to max out about 94 Mbit/s. The Raspberry Pi speed should be sigficantly higher because its eithernet interface is part of the SoC instead of being USB attached like previous boards.
 * My results align with numbers in this blog article https://www.jeffgeerling.com/blogs/jeff-geerling/getting-gigabit-networking . The same article says you can get slightly over 200 Mbit/s with a USB 3.0 Gigabit adapter.  
 * This site shows Raspberry Pi 3 and Pi 4 speeds. Note that the Pi3 speeds on this page are higher than other reference sites https://hackaday.com/2019/07/10/raspberry-pi-4-benchmarks-processor-and-network-performance-makes-it-a-real-desktop-contender/ 
 
