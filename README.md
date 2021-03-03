@@ -1,11 +1,10 @@
-This document will eventually describe how to use your Pi an internet health monitor.
-
-## Intention
-The intention is to 
-1. Capture the current internet health with the `speedtest` CLI.
-1. Publish the results to an Azure Application Insights dashboard
+## Purpose
+This project captures internet connection statistics and sends them to an Azure dashboard.
 
 ![Script Flow](./images/NetCheck-AppInsights.png)
+
+1. Capture the current ping time and optionally upload/doownload statistics of the internet connection for the machine this machine runs on as measured by the `speedtest.net` python API 
+1. Publish the results to an Azure Application Insights dashboard
 
 ## Scripts
 | Script | Purpose |
@@ -65,11 +64,38 @@ Upload: 93.90 Mbit/s
 ```
 
 ## References
-* https://github.com/sivel/speedtest-cli
-* https://docs.microsoft.com/en-us/azure/azure-monitor/app/opencensus-python
-* https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource
-* https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure
+* Speedtest Python library
+    * https://github.com/sivel/speedtest-cli
+* Azure App Insights docs
+    * https://docs.microsoft.com/en-us/azure/azure-monitor/app/opencensus-python
+    * https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource
+* App Insights Open Census Python exporter
+    * https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure
+    * https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py
+* Azure Dashboard
     * https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents
+
+## Azure Appication Insights Properties (as of 3/2021)
+The [azure exporter utils.py](https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py) sends a fixed set of properties to Application Insights that can be used in charts for **filtering** or **splitting**
+* Splitting is not supported on charts with multiple metrics. [See documentation](https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-charts)
+
+| Property Name | Populated With | Notes |
+| - | - | - |
+| Application Version | `undefined` | n/a |
+| Authenticated User | `False` | n/a |
+| Browser Version | `Python Requests n.n` | ? |
+| City | location | ? | 
+| Cloud Role Instance | **hostname** | platform.node() |
+| Cloud Role Name | Python script name | sys.argv[0] |
+| Country or Region | country | ? |
+| Device Model | `other` | hard coded device.type |
+| Device Type | `PC` | ? |
+| Operating System | `#1333 SMP ...` | platform.version() part of `uname -a` |
+| Operation Name | `undefined` | n/a |
+| Real or synthetic traffic | `False` | ? |
+| Source of synthetic traffic | `undefined` | n/a |
+| State or Province | State | ? |
+
 
 ## Raspberry Pi Networking
 Some Raspberry Pi models are speed limited on their ethernet. magpi posted ethernet test results https://magpi.raspberrypi.org/articles/raspberry-pi-4-specs-benchmarks

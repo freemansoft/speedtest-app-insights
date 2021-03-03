@@ -20,7 +20,7 @@ HOURS_PING_IT="*"
 
 # up down test once per day
 MINUTES_UP_DOWN="13"
-HOURS_UP_DOWN="3"
+HOURS_UP_DOWN="*/4"
 
 DAYS_OF_MONTH="*"
 DAYS_OF_WEEK="*"
