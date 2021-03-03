@@ -21,7 +21,7 @@ The intention is to
 1. run `1-install-crontab.sh`
 
 ## Example speedtest.net cli output
-Raspberry Pi3 on 1GB port on 1GB FIOS internet service. A Raspberry Pi3 seems to have a max ethernet speed of 100Mbit/s
+Raspberry Pi3 on 1GB port on 1GB FIOS internet service.
 
 ### speedtest installed as part of apt package
 Installed in /usr/bin
@@ -59,6 +59,7 @@ Upload: 93.90 Mbit/s
 * https://docs.microsoft.com/en-us/azure/azure-monitor/app/opencensus-python
 * https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource
 * https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure
+    * https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents
 
 ## Scripts
 | Script | Purpose |
@@ -67,3 +68,10 @@ Upload: 93.90 Mbit/s
 | 1-install-crontab.sh | Installs a crontab entry that runs NetCheck.py on a regular basis |
 | NetCheck.py | Program that runs the speedtest-cli and records metrics |
 | AppInsights.py | OpenCensus library wrapper used to send metrics to Azure Application Insights | 
+
+## Raspberry Pi Networking
+In my testing, the Raspberry Pi 3 hardwire Ethernet seems to max out about 94 Mbit/s. The Raspberry Pi speed should be sigficantly higher because its eithernet interface is part of the SoC instead of being USB attached like previous boards.
+
+* My results align with numbers in this blog article https://www.jeffgeerling.com/blogs/jeff-geerling/getting-gigabit-networking . The same article says you can get slightly over 200 Mbit/s with a USB 3.0 Gigabit adapter.  
+* This site shows Raspberry Pi 3 and Pi 4 speeds. Note that the Pi3 speeds on this page are higher than other reference sites https://hackaday.com/2019/07/10/raspberry-pi-4-benchmarks-processor-and-network-performance-makes-it-a-real-desktop-contender/ 
+

@@ -33,18 +33,6 @@ def register_azure_metrics(view_manager, azure_connection_string):
         connection_string=azure_connection_string)
     view_manager.register_exporter(exporter)
 
-# apply same to all metrics in a set
-def tag_and_record(mmap, metrics_info):
-    # apply same tags to every metric in batch
-    tag_key_isp = tag_key_module.TagKey("client.isp")
-    tag_value_isp= tag_value_module.TagValue(metrics_info['client']['isp'])
-    tag_key_server_host = tag_key_module.TagKey("server.host")
-    tag_value_server_host= tag_value_module.TagValue(metrics_info['server']['host'])
-    tagmap = tag_map_module.TagMap()
-    tagmap.insert(tag_key_isp,tag_value_isp)
-    tagmap.insert(tag_key_server_host, tag_value_server_host)
-    mmap.record(tagmap)
-
 def make_measure_float( metric_name, metric_description, metric_unit):
     # The description of our metric
     measure = measure_module.MeasureFloat(metric_name, metric_description, metric_unit)
@@ -67,24 +55,28 @@ def make_view_float(view_manager, name, description, measure):
 
 def record_speedtest(json_data):
     azure_instrumentation_key = load_insights_key()
-    
+    # standard opencensus and azure exporter setup    
     stats = stats_module.stats
     view_manager = stats.view_manager
     stats_recorder = stats.stats_recorder
     mmap = stats_recorder.new_measurement_map()
-
+    
+    # we measure 3 different things so lets describe them
     ping_measure = make_measure_float("ping_time", "The latency in milliseconds per ping check", "ms")
     upload_measure = make_measure_float("upload_speed", "Upload speed in megabits per second", "Mbps")
     download_measure = make_measure_float("download_speed", "Download speed in megabits per second", "Mbps")
 
+    # we always monitor ping and optionally capture upload or download
     make_view_float(view_manager=view_manager, name="ping view", description="last ping", measure=ping_measure)
     if (json_data['upload'] != 0):
         make_view_float(view_manager=view_manager, name="upload view", description="last upload", measure=upload_measure)
     if (json_data['download']!=0):
         make_view_float(view_manager=view_manager, name="download view", description="last download", measure=download_measure)
 
+    # lets add the exporter and register our azure key with the exporter
     register_azure_metrics(view_manager,azure_instrumentation_key)
 
+    # We always capture ping and sometimes upload or download
     record_metric_float(mmap, json_data['ping'], ping_measure)
     if (json_data['upload'] != 0):
         record_metric_float(mmap, json_data['upload'], upload_measure)
@@ -95,17 +87,29 @@ def record_speedtest(json_data):
     else:
         print(log_prefix,"no download stats to report")
 
-    # record the metrics
+    # create our tags for these metrics - record the metrics - the exporter runs on a schedule
     # this will throw a 400 if the instrumentation key isn't set
     tag_and_record(mmap,json_data)
     return mmap
+
+# Record a single metric. Apply same tags to all metrics.
+def tag_and_record(mmap, metrics_info):
+    # apply same tags to every metric in batch
+    tag_key_isp = tag_key_module.TagKey("client.isp")
+    tag_value_isp= tag_value_module.TagValue(metrics_info['client']['isp'])
+    tag_key_server_host = tag_key_module.TagKey("server.host")
+    tag_value_server_host= tag_value_module.TagValue(metrics_info['server']['host'])
+    tagmap = tag_map_module.TagMap()
+    tagmap.insert(tag_key_isp,tag_value_isp)
+    tagmap.insert(tag_key_server_host, tag_value_server_host)
+    mmap.record(tagmap)
 
 # Only consumes sample data.  Do not use in REAL app
 def main():
     sample_dict = json.loads(sample_string)
     mmap = record_speedtest(sample_dict)
 
-    # manual visual verification
+    # manual visual verification - should be only if verbose
     metrics = list(mmap.measure_to_view_map.get_metrics(datetime.utcnow()))
     print(log_prefix,"first metric", metrics[0].time_series[0].points[0])
 
