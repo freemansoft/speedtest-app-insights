@@ -6,6 +6,7 @@ The intention is to
 1. Publish the results to an Azure Application Insights dashboard
 
 ## Usage - NetCheck and Azure App Insights
+1. Run `0-setup.sh` to install dependencies
 1. Copy config.ini.template to config.ini
 1. Register in Application Insights to get a key
 1. Replace the dummy key in config.ini with yoru new key
@@ -13,6 +14,11 @@ The intention is to
   1. Run with only a ping check `python3 NetCheck.py `
   1. Run with ping, upload and download `python3 NetCheck.py --download --upload`
   1. Get help with `NetCheck.py --help`
+
+## Installing in crontab to run repeately
+1. cd into this directory
+1. Verify the cycle times you wish in `1-install-crontab.sh`.  The file is in crontab format.
+1. run `1-install-crontab.sh`
 
 ## Example speedtest.net cli output
 Raspberry Pi3 on 1GB port on 1GB FIOS internet service. A Raspberry Pi3 seems to have a max ethernet speed of 100Mbit/s
@@ -57,6 +63,7 @@ Upload: 93.90 Mbit/s
 ## Scripts
 | Script | Purpose |
 | - | - |
-| setup.sh | downloads the Speedtest.net CLI, configures Python |
+| 0-setup.sh | downloads the Speedtest.net CLI, configures Python |
+| 1-install-crontab.sh | Installs a crontab entry that runs NetCheck.py on a regular basis |
 | NetCheck.py | Program that runs the speedtest-cli and records metrics |
 | AppInsights.py | OpenCensus library wrapper used to send metrics to Azure Application Insights | 
