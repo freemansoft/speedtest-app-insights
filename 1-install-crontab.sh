@@ -10,16 +10,25 @@ Me=`whoami`
 
 # Can add NetCheck.py options to OPTIONS: --verbose or --download or --upload 
 PYTHON_SCRIPT="NetCheck.py"
-OPTIONS=""
-# CRON fields - */3 --> every 3 minutes
-MINUTES="*/3"
-HOURS="*"
+
+OPTIONS_PING_IT=""
+OPTIONS_UP_DOWN="--upload --download"
+
+# ping test every 3 minutes
+MINUTES_PING_IT="*/3"
+HOURS_PING_IT="*"
+
+# up down test once per day
+MINUTES_UP_DOWN="13"
+HOURS_UP_DOWN="3"
+
 DAYS_OF_MONTH="*"
 DAYS_OF_WEEK="*"
 # Use this if you want to see the logs in this folder - easier for torubleshooting
 # REDIRECT_LOGS=">> $DIR/cron.log 2>&1"
 REDIRECT_LOGS=""
-CRONTAB_LINE="$MINUTES $HOURS $DAYS_OF_MONTH * $DAYS_OF_WEEK cd $DIR && python3 $PYTHON_SCRIPT $OPTONS $REDIRECT_LOGS"
 
 # must quote CRONTAB_LINE so it does expand asterisk
-(crontab -l | grep -v -F $PYTHON_SCRIPT ; echo "$CRONTAB_LINE") | crontab -
+CRONTAB_LINE_PING="$MINUTES_PING_IT $HOURS_PING_IT $DAYS_OF_MONTH * $DAYS_OF_WEEK cd $DIR && python3 $PYTHON_SCRIPT $OPTIONS_PING_IT $REDIRECT_LOGS"
+CRONTAB_LINE_UP_DOWN="$MINUTES_UP_DOWN $HOURS_UP_DOWN $DAYS_OF_MONTH * $DAYS_OF_WEEK cd $DIR && python3 $PYTHON_SCRIPT $OPTIONS_UP_DOWN $REDIRECT_LOGS"
+(crontab -l | grep -v -F $PYTHON_SCRIPT ; echo "$CRONTAB_LINE_PING" ; echo "$CRONTAB_LINE_UP_DOWN") | crontab -
