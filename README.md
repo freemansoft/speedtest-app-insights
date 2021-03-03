@@ -75,7 +75,8 @@ Upload: 93.90 Mbit/s
 * Azure Dashboard
     * https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents
 
-## Azure Appication Insights Properties (as of 3/2021)
+## Azure Appication Insights Properties 
+_as of 3/2021_
 The [azure exporter utils.py](https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py) sends a fixed set of properties to Application Insights that can be used in charts for **filtering** or **splitting**
 * Splitting is not supported on charts with multiple metrics. [See documentation](https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-charts)
 
