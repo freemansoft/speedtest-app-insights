@@ -5,6 +5,8 @@ This project captures internet connection statistics and sends them to an Azure 
 
 1. Capture the current ping time and optionally upload/doownload statistics of the internet connection for the machine this machine runs on as measured by the `speedtest.net` python API 
 1. Publish the results to an Azure Application Insights dashboard
+ 
+![Application Insights Dashboard](./images/App-Insights-Dashboard.png)
 
 ## Scripts
 | Script | Purpose |
