@@ -13,6 +13,7 @@ This project captures internet connection statistics and sends them to an Azure 
 | - | - |
 | 0-setup.sh | downloads the Speedtest.net CLI, configures Python |
 | 1-install-crontab.sh | Installs a crontab entry that runs NetCheck.py on a regular basis |
+| 3-remove-crontab.sh | removes this user's NetCheck.py crontab entries | 
 | NetCheck.py | Program that runs the speedtest-cli and records metrics |
 | AppInsights.py | OpenCensus library wrapper used to send metrics to Azure Application Insights | 
 | setup.ps1 | Windows setup program. Will prompt to install python3 via Windows store |
