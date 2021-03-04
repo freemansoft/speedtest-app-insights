@@ -67,21 +67,19 @@ Testing upload speed............................................................
 Upload: 93.90 Mbit/s
 ```
 
-## References
-* Speedtest Python library
-    * https://github.com/sivel/speedtest-cli
-* Azure App Insights docs
-    * https://docs.microsoft.com/en-us/azure/azure-monitor/app/opencensus-python
-    * https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource
-* App Insights Open Census Python exporter
-    * https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure
-    * https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py
-* Azure Dashboard
-    * https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents
+## Azure Appication Insights 
+The gathered metrics show up in the Applicaton Insights under 
+* `Home > Application Insights > _your resource_ ` 
+* Right side-bar `Metrics`
 
-## Azure Appication Insights Properties 
+| Metric Namespace | Metric | 
+| - | - |
+| `Log Based Metrics ` | `ST Ping Time` |
+| `Log Based Metrics ` | `ST Download Speed` |
+| `Log Based Metrics ` | `ST Upload Speed` |
+
+### Standard Dimensions
 _as of 3/2021_
-
 The [azure exporter utils.py](https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py) sends a fixed set of properties to Application Insights that can be used in charts for **filtering** or **splitting**
 * Splitting is not supported on charts with multiple metrics. [See documentation](https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-charts)
 
@@ -102,11 +100,32 @@ The [azure exporter utils.py](https://github.com/census-instrumentation/opencens
 | Source of synthetic traffic | `undefined` | n/a |
 | State or Province | State | ? |
 
+### Custom Dimensions
+AppInsights.py adds a couple custom tags to the data. These show up as custom dimensions.  
+CustomDimensions can be seen on the query screen results pane as a combined json structure. 
+They can be used to filter in gauges.
 
-## Raspberry Pi Networking
+| Custom Dimension | Value |
+| - | - |
+| client_isp | client isp as reported by speedtest sdk |
+| server_host | speedtest server host as reported by speedtest sdk | 
+
+# Raspberry Pi Networking
 Some Raspberry Pi models are speed limited on their ethernet. magpi posted ethernet test results https://magpi.raspberrypi.org/articles/raspberry-pi-4-specs-benchmarks
 
 * In my testing, the Raspberry Pi 3 hardwire Ethernet seems to max out about 94 Mbit/s. The Raspberry Pi speed should be sigficantly higher because its eithernet interface is part of the SoC instead of being USB attached like previous boards.
 * My results align with numbers in this blog article https://www.jeffgeerling.com/blogs/jeff-geerling/getting-gigabit-networking . The same article says you can get slightly over 200 Mbit/s with a USB 3.0 Gigabit adapter.  
 * This site shows Raspberry Pi 3 and Pi 4 speeds. Note that the Pi3 speeds on this page are higher than other reference sites https://hackaday.com/2019/07/10/raspberry-pi-4-benchmarks-processor-and-network-performance-makes-it-a-real-desktop-contender/ 
+
+# References
+* Speedtest Python library
+    * https://github.com/sivel/speedtest-cli
+* Azure App Insights docs
+    * https://docs.microsoft.com/en-us/azure/azure-monitor/app/opencensus-python
+    * https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource
+* App Insights Open Census Python exporter
+    * https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure
+    * https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py
+* Azure Dashboard
+    * https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents
 
