@@ -56,6 +56,7 @@ def run_test(should_download, should_upload):
         print(log_prefix,"skipping upload test")
     if (args.share) :
         print(log_prefix,"sharing results")
+        print(log_prefix,"results sharing may be broken 03/03/2021")
         s.results.share()
     return s.results
 

@@ -28,8 +28,11 @@ DAYS_OF_WEEK="*"
 # REDIRECT_LOGS=">> $DIR/cron.log 2>&1"
 REDIRECT_LOGS=""
 
-echo "Installing crontab entries for ping and upload/download"
+echo "Installing crontab entries for ping and upload/download."
+#echo "Ignore any messages that say 'no crontab for $Me'"
 # must quote CRONTAB_LINE so it does expand asterisk
 CRONTAB_LINE_PING="$MINUTES_PING_IT $HOURS_PING_IT $DAYS_OF_MONTH * $DAYS_OF_WEEK cd $DIR && python3 $PYTHON_SCRIPT $OPTIONS_PING_IT $REDIRECT_LOGS"
 CRONTAB_LINE_UP_DOWN="$MINUTES_UP_DOWN $HOURS_UP_DOWN $DAYS_OF_MONTH * $DAYS_OF_WEEK cd $DIR && python3 $PYTHON_SCRIPT $OPTIONS_UP_DOWN $REDIRECT_LOGS"
 (crontab -l | grep -v -F $PYTHON_SCRIPT ; echo "$CRONTAB_LINE_PING" ; echo "$CRONTAB_LINE_UP_DOWN") | crontab -
+echo "New crontab for '$Me' is"
+crontab -l
