@@ -1,4 +1,4 @@
-## Purpose
+# Purpose
 This project captures internet connection statistics and sends them to an Azure dashboard.
 
 ![Script Flow](./images/NetCheck-AppInsights.png)
@@ -18,7 +18,7 @@ This project captures internet connection statistics and sends them to an Azure 
 | AppInsights.py | OpenCensus library wrapper used to send metrics to Azure Application Insights | 
 | setup.ps1 | Windows setup program. Will prompt to install python3 via Windows store |
 
-## Usage - NetCheck and Azure App Insights
+# Usage - NetCheck and Azure App Insights
 1. Run `0-setup.sh` to install dependencies
 1. Copy config.ini.template to config.ini
 1. Register in Application Insights to get a key
@@ -33,10 +33,10 @@ This project captures internet connection statistics and sends them to an Azure 
 1. Verify the cycle times you wish in `1-install-crontab.sh`.  The file is in crontab format.
 1. run `1-install-crontab.sh`
 
-## Example speedtest.net cli output
+# Example speedtest.net cli output
 Raspberry Pi3 on 1GB port on 1GB FIOS internet service.
 
-### speedtest installed as part of apt package
+## speedtest installed as part of apt package
 Installed in /usr/bin
 ```
 pi@pi-52863f1:~/Documents/speedtest-app-insights $  /usr/bin/speedtest
@@ -52,7 +52,7 @@ Packet Loss:     0.0%
  Result URL: https://www.speedtest.net/result/c/dee19d27-1f5a-4cff-aa42-d8084a145b8f
 ```
 
-### speedtest installed as part of speedtest-cli github pull
+## speedtest installed as part of speedtest-cli github pull
 Installed in ~/.local/bin
 ```
 $ speedtest
@@ -67,10 +67,16 @@ Testing upload speed............................................................
 Upload: 93.90 Mbit/s
 ```
 
-## Azure Appication Insights 
-The gathered metrics show up in the Applicaton Insights under 
-* `Home > Application Insights > _your resource_ ` 
-* Right side-bar `Metrics`
+# Azure Appication Insights 
+The gathered metrics show up in the Applicaton Insights under _Monitoring / Metrics _
+1. `Home > Application Insights > _your resource_ ` 
+1. Right side-bar `Monitoring` / `Metrics`
+
+They can also be seen under _Monitoring / Logs_
+1. `Home > Application Insights > _your resource_ ` 
+1. Right side-bar `Monitoring` / `Logs`
+
+You can find the custom metrics in the varioius Filtering and Splitting drop lists pairs under
 
 | Metric Namespace | Metric | 
 | - | - |
@@ -78,7 +84,7 @@ The gathered metrics show up in the Applicaton Insights under
 | `Log Based Metrics ` | `ST Download Speed` |
 | `Log Based Metrics ` | `ST Upload Speed` |
 
-### Standard Dimensions
+## Standard Dimensions
 _as of 3/2021_
 The [azure exporter utils.py](https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py) sends a fixed set of properties to Application Insights that can be used in charts for **filtering** or **splitting**
 * Splitting is not supported on charts with multiple metrics. [See documentation](https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-charts)
@@ -100,17 +106,12 @@ The [azure exporter utils.py](https://github.com/census-instrumentation/opencens
 | Source of synthetic traffic | `undefined` | n/a |
 | State or Province | State | ? |
 
-### Custom Dimensions
+## Custom Dimensions
 AppInsights.py adds a couple custom tags to the data. These show up as custom dimensions.  
-CustomDimensions can be seen on the query screen results pane as a combined json structure. 
 
-![View Custom Dimensions in query results](./images/App-Insights-CustDim-Log-View.png)
-
-CustomDimensions must added explicitly to the results configuration
-
-![Adding Custom Dimensions to query results](./images/App-Insights-CustDim-Enable.png)
-
-CustomDimensions can be used to filter in gauges.
+* CustomDimensions can be seen on the query screen results pane as a combined json structure. 
+* CustomDimensions must added explicitly to the results configuration
+* CustomDimensions can be used to filter in gauges.
 
 | Custom Dimension | Value |
 | - | - |
