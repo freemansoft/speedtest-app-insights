@@ -103,12 +103,20 @@ The [azure exporter utils.py](https://github.com/census-instrumentation/opencens
 ### Custom Dimensions
 AppInsights.py adds a couple custom tags to the data. These show up as custom dimensions.  
 CustomDimensions can be seen on the query screen results pane as a combined json structure. 
-They can be used to filter in gauges.
+
+![View Custom Dimensions in query results](./images/App-Insights-CustDim-Log-View.png)
+
+CustomDimensions must added explicitly to the results configuration
+
+![Adding Custom Dimensions to query results](./images/App-Insights-CustDim-Enable.png)
+
+CustomDimensions can be used to filter in gauges.
 
 | Custom Dimension | Value |
 | - | - |
 | client_isp | client isp as reported by speedtest sdk |
 | server_host | speedtest server host as reported by speedtest sdk | 
+
 
 # Raspberry Pi Networking
 Some Raspberry Pi models are speed limited on their ethernet. magpi posted ethernet test results https://magpi.raspberrypi.org/articles/raspberry-pi-4-specs-benchmarks
