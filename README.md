@@ -78,11 +78,13 @@ They can also be seen under _Monitoring / Logs_
 
 You can find the custom metrics in the varioius Filtering and Splitting drop lists pairs under
 
-| Metric Namespace | Metric | 
-| - | - |
-| `Log Based Metrics ` | `ST Ping Time` |
-| `Log Based Metrics ` | `ST Download Speed` |
-| `Log Based Metrics ` | `ST Upload Speed` |
+| Metric Namespace | Metric | Description |
+| - | - | - |
+| `Log Based Metrics` | `ST Ping Time` | ping time as reported by SpeedTest |
+| `Log Based Metrics` | `ST Download Speed` | download speed as reported by SpeedTest |
+| `Log Based Metrics` | `ST Upload Speed` | upload speed time as reported by SpeedTest |
+| `Log Based Metrics` | `ST Servers Time` | initial SpeedTest setup call time |
+| `Log Based metrics` | `ST Best Servers Time` | time it took to get 'best servers' from SpeedTest |
 
 ## Standard Dimensions
 _as of 3/2021_
