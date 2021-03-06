@@ -3,6 +3,7 @@ import argparse
 import speedtest
 import json
 import os
+import time
 # https://github.com/sivel/speedtest-cli
 #
 # do not name local python file same as import file - do not name speedtest.py
@@ -40,9 +41,12 @@ def run_test(should_download, should_upload):
     # geeting the servers does a ping
     s = speedtest.Speedtest() 
     print(log_prefix,"getting servers")
+    tic = time.perf_counter()
     s.get_servers(servers)
+    tac = time.perf_counter()
     s.get_best_server()
-
+    toc = time.perf_counter()
+    
     if (args.download) : 
         print(log_prefix,"running download test")
         s.download(threads=threads)
@@ -54,11 +58,15 @@ def run_test(should_download, should_upload):
         s.upload(threads=threads)
     else :
         print(log_prefix,"skipping upload test")
+
     if (args.share) :
         print(log_prefix,"sharing results")
         print(log_prefix,"results sharing may be broken 03/03/2021")
         s.results.share()
-    return s.results
+    
+    # convert seconds based times to msec
+    setup_time_dict = {'get_servers':(tac-tic)*1000.0,'get_best_servers':(toc-tac)*1000.0}
+    return s.results, setup_time_dict
 
 #---------------------------------------------------
 #
@@ -90,26 +98,33 @@ def write_json(results,outfile):
         print(log_prefix,"no file output requested")
         return "{}"
 
+# python 3.9 adds a | operator
+def Merge(dict1, dict2):
+    res = {**dict1, **dict2}
+    return res
 
 #---------------------------------------------------
 # Run the test
 #---------------------------------------------------
-results = run_test(args.upload, args.download)
-write_json(results,args.outfile)
+results_speed, results_setup = run_test(args.upload, args.download)
+write_json(results_speed,args.outfile)
 
 # use the functions inside AppInsightsDemo.py
+# augment the results with the setup times
 from AppInsights import *
-record_speedtest(results.dict())
+results_combined = Merge(results_speed.dict(),results_setup)
+#print(log_prefix, results_combined)
+record_speedtest(results_combined)
 
 #---------------------------------------------------
 # for testing
 #---------------------------------------------------
 if (args.verbose) :
-    #print(log_prefix,"\nas dictionary")
-    #print(log_prefix,results.dict())
     print(log_prefix,"\nas json string")
-    print(log_prefix,json.dumps(results.json()))
-    print(log_prefix, json.dumps(results.dict(), indent=2, sort_keys=True))
+    print(log_prefix,json.dumps(results_speed.json()))
+    print(log_prefix, json.dumps(results_speed.dict(), indent=2, sort_keys=True))
+    #print(log_prefix,"\nas dictionary")
+    #print(log_prefix,results_speed.dict())
     # print(log_prefix,"\nas csv")
-    # print(log_prefix,results.csv_header())
-    # print(log_prefix,results.csv())
+    # print(log_prefix,results_speed.csv_header())
+    # print(log_prefix,results_speed.csv())

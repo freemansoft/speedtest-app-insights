@@ -65,12 +65,18 @@ def record_speedtest(json_data):
     stats_recorder = stats.stats_recorder
     mmap = stats_recorder.new_measurement_map()
     
+    # perf data gathered while running tests
+    get_servers_measure = make_measure_float("get_servers_time", "Amount of time it took to get_servers()", "ms")
+    get_best_servers_measure = make_measure_float("get_best_servers_time", "Amount of time it took to get_best_servers()", "ms")
     # we measure 3 different things so lets describe them
     ping_measure = make_measure_float("ping_time", "The latency in milliseconds per ping check", "ms")
     upload_measure = make_measure_float("upload_speed", "Upload speed in megabits per second", "Mbps")
     download_measure = make_measure_float("download_speed", "Download speed in megabits per second", "Mbps")
 
     # we always monitor ping and optionally capture upload or download
+    # add setup metrics
+    make_view_float(view_manager=view_manager, name="ST Servers Time", description="get servers", measure=get_servers_measure)
+    make_view_float(view_manager=view_manager, name="ST Best Servers Time", description="get best servers", measure=get_best_servers_measure)
     # the name is what you see in the Azure App Insights drop lists 
     # https://github.com/census-instrumentation/opencensus-python/issues/1015
     make_view_float(view_manager=view_manager, name="ST Ping Time", description="last ping", measure=ping_measure)
@@ -82,6 +88,9 @@ def record_speedtest(json_data):
     # lets add the exporter and register our azure key with the exporter
     register_azure_metrics(view_manager,azure_instrumentation_key)
 
+    # setup times
+    record_metric_float(mmap, json_data['get_servers'], get_servers_measure)
+    record_metric_float(mmap, json_data['get_best_servers'], get_best_servers_measure)
     # We always capture ping and sometimes upload or download
     record_metric_float(mmap, json_data['ping'], ping_measure)
     if (json_data['upload'] != 0):
