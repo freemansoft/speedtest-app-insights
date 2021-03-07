@@ -5,6 +5,7 @@ from datetime import datetime
 import json
 import configparser
 import os
+import logging
 from opencensus.stats import aggregation as aggregation_module
 from opencensus.stats import measure as measure_module
 from opencensus.stats import stats as stats_module
@@ -13,8 +14,11 @@ from opencensus.tags import tag_key as tag_key
 from opencensus.tags import tag_map as tag_map
 from opencensus.tags import tag_value as tag_value
 from opencensus.ext.azure import metrics_exporter
+from opencensus.ext.azure.log_exporter import AzureLogHandler
 
-log_prefix = os.path.basename(__file__) + ":"
+#log_prefix = os.path.basename(__file__) + ":"
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # sample speedtest.net output json as a string
 sample_string = "{\"download\": 93579659.45913646, \"upload\": 94187295.64264823, \"ping\": 40.125, \"server\": {\"url\": \"http://speedtest.red5g.com:8080/speedtest/upload.php\", \"lat\": \"38.9047\", \"lon\": \"-77.0164\", \"name\": \"Washington, DC\", \"country\": \"United States\", \"cc\": \"US\", \"sponsor\": \"red5g.com\", \"id\": \"30471\", \"host\": \"speedtest.red5g.com:8080\", \"d\": 23.71681279068988, \"latency\": 9.125}, \"timestamp\": \"2021-03-01T13:18:16.460145Z\", \"bytes_sent\": 117825536, \"bytes_received\": 117376482, \"share\": null, \"client\": {\"ip\": \"108.48.69.33\", \"lat\": \"39.0828\", \"lon\": \"-77.1674\", \"isp\": \"Verizon Fios\", \"isprating\": \"3.7\", \"rating\": \"0\", \"ispdlavg\": \"0\", \"ispulavg\": \"0\", \"loggedin\": \"0\", \"country\": \"US\"}}"
@@ -28,15 +32,23 @@ def load_insights_key():
     config = configparser.ConfigParser()
     config.read('config.ini')
     config['azure']
-    #print(log_prefix, config['azure']['azure_instrumentation_key'])
+    logger.debug("Instrumentation key: %s", config['azure']['azure_instrumentation_key'])
     return config['azure']['azure_instrumentation_key']
 
-def register_azure_metrics(view_manager, azure_connection_string):
+# after this, everything sent to this view will end up in azure as a metric
+def register_azure_exporter_with_view_manager(view_manager, azure_connection_string):
     # enable the Azure metrics exporter which talks to Azure
     exporter = metrics_exporter.new_metrics_exporter(
         enable_standard_metrics=False,
         connection_string=azure_connection_string)
     view_manager.register_exporter(exporter)
+
+# call this if you want to send logs to Azure App Insight
+# after this, every log(warn) will end up in azure as a log event "trace" !"tracing"
+def register_azure_with_logger(logger,azure_connection_string):
+    logger.addHandler(AzureLogHandler(
+        connection_string=azure_connection_string)
+)
 
 def create_metric_measure( metric_name, metric_description, metric_unit):
     # The description of our metric
@@ -47,7 +59,7 @@ def record_metric_float(mmap,value,measure):
     # data from the speed test
     mmap.measure_float_put(measure,value)
     # the measure becomes the key to the measurement map
-    print(log_prefix,"metrics: ",measure.name, "value:", value, "number of measurements:",len(mmap.measurement_map))
+    logger.info("metrics: %s value: %s number of measurements: %s ",measure.name, value, len(mmap.measurement_map))
 
 def create_metric_view(view_manager, name, description, measure):
     # view must be registered prior to record
@@ -59,7 +71,6 @@ def create_metric_view(view_manager, name, description, measure):
     view_manager.register_view(ping_view)
 
 def push_speedtest_metrics(json_data):
-    azure_instrumentation_key = load_insights_key()
     # standard opencensus and azure exporter setup    
     stats = stats_module.stats
     view_manager = stats.view_manager
@@ -87,7 +98,8 @@ def push_speedtest_metrics(json_data):
         create_metric_view(view_manager=view_manager, name="ST Download Rate", description="last download", measure=download_measure)
 
     # lets add the exporter and register our azure key with the exporter
-    register_azure_metrics(view_manager,azure_instrumentation_key)
+    azure_instrumentation_key = load_insights_key()
+    register_azure_exporter_with_view_manager(view_manager,azure_instrumentation_key)
 
     # views(measure, view)  events(measure,metric)
     # setup times
@@ -98,11 +110,11 @@ def push_speedtest_metrics(json_data):
     if (json_data['upload'] != 0):
         record_metric_float(mmap, json_data['upload'], upload_measure)
     else:
-        print(log_prefix,"no upload stats to report")
+        logger.info("no upload stats to report")
     if (json_data['download']!=0):
         record_metric_float(mmap, json_data['download'], download_measure)
     else:
-        print(log_prefix,"no download stats to report")
+        logger.info("no download stats to report")
 
     # create our tags for these metrics - record the metrics - the exporter runs on a schedule
     # this will throw a 400 if the instrumentation key isn't set
@@ -117,7 +129,7 @@ def tag_and_record(mmap, metrics_info):
     tagmap = tag_map.TagMap()
     tagmap.insert(tag_key_isp,tag_value_isp)
     tagmap.insert(tag_key_server_host, tag_value_server_host)
-    print(log_prefix,"tagmap:", tagmap.map)
+    logger.debug("tagmap: %s", tagmap.map)
     mmap.record(tagmap)
 
 # Only consumes sample data.  Do not use in REAL app
@@ -127,7 +139,7 @@ def main():
 
     # manual visual verification - should be only if verbose
     metrics = list(mmap.measure_to_view_map.get_metrics(datetime.utcnow()))
-    print(log_prefix,"first metric", metrics[0].time_series[0].points[0])
+    logger.info("first metric %s", metrics[0].time_series[0].points[0])
 
 if __name__ == "__main__":
     main()
