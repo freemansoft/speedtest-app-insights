@@ -4,6 +4,10 @@ import speedtest
 import json
 import os
 import time
+#---------------------------
+# TODO add DNS lookup timing
+#---------------------------
+
 # https://github.com/sivel/speedtest-cli
 #
 # do not name local python file same as import file - do not name speedtest.py
@@ -114,7 +118,7 @@ write_json(results_speed,args.outfile)
 from AppInsights import *
 results_combined = Merge(results_speed.dict(),results_setup)
 #print(log_prefix, results_combined)
-record_speedtest(results_combined)
+push_speedtest_metrics(results_combined)
 
 #---------------------------------------------------
 # for testing

@@ -8,7 +8,13 @@ This project captures internet connection statistics and sends them to an Azure 
  
 ![Application Insights Dashboard](./images/App-Insights-Dashboard.png)
 
-## Scripts
+# Prerequisites
+1. Python3
+1. An internet connection
+1. An account in Azure that can run the free tier of _Azure Application Insights_.  See references below for instructions.
+    1. You can comment out the AppInsights.py call at the bottom of NetCheck.py if you don't wish to create a dashboard in _Azure Application Insights_
+
+# Scripts in this repository
 | Script | Purpose |
 | - | - |
 | 0-setup.sh | downloads the Speedtest.net CLI, configures Python |
@@ -68,15 +74,25 @@ Upload: 93.90 Mbit/s
 ```
 
 # Azure Appication Insights 
-The gathered metrics show up in the Applicaton Insights under _Monitoring / Metrics _
+Python information can be sent to Azure Application Insights as Metrics, Traces or Logs.  
+The data is actualy sent as events which means that it could appear in _Metrics_ as an _Aggregation_ and in _Logs_ as an individual event.
+
+## Metrics Structure in the OpenCensus API and Application Insights exporter
+This is _partially correct_ explanation of OpenCensus events and Azure bindings
+1. The `measure` is a type definition that is used as a key to register both `metrics` and `views`
+    1. The view list has `views` keyed by `measure`
+    1. The events have `recordings` keyed by `measure`
+
+## Metrics in AppInsight Dashboard
+Metrics aggregations are visible as `metrics` in the Applicaton Insights under _Monitoring / Metrics _
 1. `Home > Application Insights > _your resource_ ` 
 1. Right side-bar `Monitoring` / `Metrics`
 
-They can also be seen under _Monitoring / Logs_
+Individual _Metrics Events_ can also be seen under _Monitoring / Logs_
 1. `Home > Application Insights > _your resource_ ` 
 1. Right side-bar `Monitoring` / `Logs`
 
-You can find the custom metrics in the varioius Filtering and Splitting drop lists pairs under
+You can find the custom metrics in the various Filtering and Splitting drop lists pairs under
 
 | Metric Namespace | Metric | Description |
 | - | - | - |
