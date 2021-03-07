@@ -133,7 +133,7 @@ def tag_and_record(mmap, metrics_info):
     mmap.record(tagmap)
 
 # Only consumes sample data.  Do not use in REAL app
-def main():
+def AppInsightsMain():
     sample_dict = json.loads(sample_string)
     mmap = push_speedtest_metrics(sample_dict)
 
@@ -142,4 +142,4 @@ def main():
     logger.info("first metric %s", metrics[0].time_series[0].points[0])
 
 if __name__ == "__main__":
-    main()
+    AppInsightsMain()

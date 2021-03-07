@@ -14,7 +14,7 @@ from SpeedTest import *
 #
 # do not name local python file same as import file - do not name speedtest.py
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("NetCheck")
 
 #--------------------------------------------------
 # determine options
@@ -25,7 +25,7 @@ parser.add_argument("-d","--download", default=False, help="include download met
 parser.add_argument("-u","--upload", default=False, help="include upload metrics",action="store_true")
 parser.add_argument("-o","--outfile", type=argparse.FileType('wt'), help="write output to file as json")
 parser.add_argument("-s","--share", default=False, help="register results with speedtest", action="store_true" )
-parser.add_argument("-v","--verbose", default=False, help="spend speedteset results json to console", action="store_true")
+parser.add_argument("-v","--verbose", default=False, help="log speedtest results as json to console and Azure", action="store_true")
 args = parser.parse_args()
 if (args.upload):
     logger.info("upload enabled")
@@ -50,11 +50,10 @@ push_speedtest_metrics(results_combined)
 # for testing
 #---------------------------------------------------
 if (args.verbose) :
-    logger.info("as json string")
-    logger.info("%s",json.dumps(results_speed.json()))
-    logger.info("%s", json.dumps(results_speed.dict(), indent=2, sort_keys=True))
-    logger.debug("\nas dictionary")
-    logger.debug("%s",results_speed.dict())
-    logger.debug("\nas csv")
-    logger.debug("%s", results_speed.csv_header())
-    logger.debug("%s",results_speed.csv())
+    register_azure_with_logger(logger, load_insights_key())
+    logger.info("{ \"combined_data\": %s }", json.dumps(results_combined, sort_keys=True)) 
+    logger.debug("as json: %s", json.dumps(results_speed.dict(), indent=2, sort_keys=True))
+    logger.debug("as encoded string: %s",json.dumps(results_speed.json())) # logs the entire object a singl json string
+    logger.debug("as dictionary: %s",results_speed.dict())
+    logger.debug("as csv: %s\n%s", results_speed.csv_header(),results_speed.csv())
+
