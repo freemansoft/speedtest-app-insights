@@ -28,14 +28,18 @@ This project captures internet connection statistics and sends them to an Azure 
 
 # Usage - NetCheck and Azure App Insights
 1. Run `0-setup.sh` to install dependencies
-1. Copy config.ini.template to config.ini
-1. Register in Application Insights to get a key
-1. Replace the dummy key in config.ini with yoru new key
+1. Get an Azure account and log in
+    1. Register in Application Insights to get an Application Insights key
+    1. Copy config.ini.template to config.ini
+    1. Replace the dummy key in config.ini with yoru new key
 1. Run `NetCheck.py`
   1. Run with only a ping check `python3 NetCheck.py `
   1. Run with ping, upload and download `python3 NetCheck.py --download --upload`
   1. Get help with `NetCheck.py --help`
 
+**Optional**
+1. Manage data retention  [the data retention period](https://docs.microsoft.com/en-us/azure/azure-monitor/app/pricing#change-the-data-retention-period). Learn [how long data is kept](https://docs.microsoft.com/en-us/azure/azure-monitor/app/data-retention-privacy).  
+    
 ## Installing in crontab to run repeately
 1. cd into this directory
 1. Verify the cycle times you wish in `1-install-crontab.sh`.  The file is in crontab format.
