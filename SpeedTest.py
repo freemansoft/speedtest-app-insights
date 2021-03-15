@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 #---------------------------------------------------
 # Actual speed test
 #---------------------------------------------------
-def run_test(should_download, should_upload, should_share):
+def run_test(should_download, should_upload, should_share, tracer):
     servers = []
     # If you want to test against a specific server
     # servers = [1234]
@@ -32,28 +32,33 @@ def run_test(should_download, should_upload, should_share):
     s = speedtest.Speedtest() 
     logger.info("getting servers")
     tic = time.perf_counter()
-    s.get_servers(servers)
+    with tracer.span(name="get_servers") as span:
+        s.get_servers(servers)
     tac = time.perf_counter()
-    s.get_best_server()
-    toc = time.perf_counter()
-    
+    with tracer.span(name="get_best_servers") as span:
+        s.get_best_server()
+    toc = time.perf_counter()    
+
     if (should_download) : 
-        logger.info("running download test")
-        s.download(threads=threads)
+        with tracer.span(name="measure_download") as span:
+            logger.info("running download test")
+            s.download(threads=threads)
     else :
         logger.info("skipping download test")
 
     if (should_upload) :
-        logger.info("running upload test")
-        s.upload(threads=threads)
+        with tracer.span(name="measure_upload") as span:
+            logger.info("running upload test")
+            s.upload(threads=threads)
     else :
         logger.info("skipping upload test")
 
     if (should_share) :
-        logger.info("sharing results")
-        logger.info("results sharing may be broken 03/03/2021")
-        s.results.share()
+        with tracer.span(name="sharing_is_caring") as span:
+            logger.info("sharing results - results sharing may be broken 03/03/2021")
+            s.results.share()
     
+    # calculate and return the setup time which is not reported by speedtest
     # convert seconds based times to msec
     setup_time_dict = {'get_servers':(tac-tic)*1000.0,'get_best_servers':(toc-tac)*1000.0}
     return s.results, setup_time_dict

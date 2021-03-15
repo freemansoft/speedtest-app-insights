@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 #
+# Build metrics from the data reported by speedtest and passed in.
+# Can also register a logger to export logs to Application Insights
+#
+#
 # This code is a useful example but is hardcoded to specific fields when called as a function library
 from datetime import datetime
 import json
 import configparser
 import os
-import logging
+# OpenCensus Metrics and Azure Application Insights
 from opencensus.stats import aggregation as aggregation_module
 from opencensus.stats import measure as measure_module
 from opencensus.stats import stats as stats_module
@@ -14,7 +18,14 @@ from opencensus.tags import tag_key as tag_key
 from opencensus.tags import tag_map as tag_map
 from opencensus.tags import tag_value as tag_value
 from opencensus.ext.azure import metrics_exporter
+# OpenCensus Log capture and Application Insights via logger
+import logging
 from opencensus.ext.azure.log_exporter import AzureLogHandler
+# OpenCensus TraceCapture and Application Insights via Tracer
+from opencensus.ext.azure.trace_exporter import AzureExporter
+from opencensus.trace.samplers import AlwaysOnSampler
+from opencensus.trace.tracer import Tracer
+from opencensus.trace.span import SpanKind
 
 #log_prefix = os.path.basename(__file__) + ":"
 logging.basicConfig(level=logging.INFO)
@@ -45,10 +56,18 @@ def register_azure_exporter_with_view_manager(view_manager, azure_connection_str
 
 # call this if you want to send logs to Azure App Insight
 # after this, every log(warn) will end up in azure as a log event "trace" !"tracing"
-def register_azure_with_logger(logger,azure_connection_string):
+def register_azure_handler_with_logger(logger,azure_connection_string):
     logger.addHandler(AzureLogHandler(
         connection_string=azure_connection_string)
 )
+
+## Call this to get an OpenCensus Tracer that is bound to Azure Application Insights
+def register_azure_exporter_with_tracer(azure_connection_string):
+    tracer = Tracer(
+        exporter= AzureExporter(connection_string=azure_connection_string), 
+        sampler=AlwaysOnSampler()
+        )
+    return tracer
 
 def create_metric_measure( metric_name, metric_description, metric_unit):
     # The description of our metric

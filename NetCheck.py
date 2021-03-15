@@ -34,23 +34,27 @@ if (args.download):
 if (args.share):
     logger.info("result sharing enabled")
 
-
+# Enable opencensus tracing. Create a new tracer for every run / loop.
+tracer = register_azure_exporter_with_tracer(load_insights_key())
 #---------------------------------------------------
 # Run the test
 #---------------------------------------------------
-results_speed, results_setup = run_test(args.upload, args.download, args.share)
-write_json(results_speed,args.outfile)
-# augment the results with the setup times
-results_combined = Merge(results_speed.dict(),results_setup)
-logger.debug("results combined: %s", results_combined)
+# Other Tracing spans will be children to this one
+with tracer.span(name="main") as span:
+    results_speed, results_setup = run_test(args.upload, args.download, args.share, tracer)
+    write_json(results_speed,args.outfile)
+    # augment the results with the setup times
+    results_combined = Merge(results_speed.dict(),results_setup)
+    logger.debug("results combined: %s", results_combined)
 # use the functions inside AppInsights.py
 push_speedtest_metrics(results_combined)
 
 #---------------------------------------------------
-# for testing
+# We route the verbose log output to the ApplicationInsights logs.
 #---------------------------------------------------
 if (args.verbose) :
-    register_azure_with_logger(logger, load_insights_key())
+    # This program exits after one execution so only these logs end up in Application insights.
+    register_azure_handler_with_logger(logger, load_insights_key())
     logger.info("{ \"combined_data\": %s }", json.dumps(results_combined, sort_keys=True)) 
     logger.debug("as json: %s", json.dumps(results_speed.dict(), indent=2, sort_keys=True))
     logger.debug("as encoded string: %s",json.dumps(results_speed.json())) # logs the entire object a singl json string
