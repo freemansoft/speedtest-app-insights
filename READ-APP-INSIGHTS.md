@@ -10,6 +10,11 @@ This program leverages the three types of telemetry supported for Python Applica
 | Azure Monitor _metrics exporter_ | metrics | `customMetrics` |
 | Azure Monitor _log exporter_ | Python logger | `traces` |
 
+## Use Case
+You can use the dash board to track your performance or compare the performance of different locations or providers
+
+![Multi-Site](./images/speed-test-dual-site.png)
+
 ## Standard Dimensions sent to Application Insights via all exporters
 _as of 3/2021_
 The [azure exporter utils.py](https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py) sends a fixed set of properties to Application Insights that can be used in charts for **filtering** or **splitting**
