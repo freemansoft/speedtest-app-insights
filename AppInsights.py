@@ -49,6 +49,7 @@ def load_insights_key():
 # after this, everything sent to this view will end up in azure as a metric
 def register_azure_exporter_with_view_manager(view_manager, azure_connection_string):
     # enable the Azure metrics exporter which talks to Azure
+    # standard metrics are CPU, memory, storage, etc.
     exporter = metrics_exporter.new_metrics_exporter(
         enable_standard_metrics=False,
         connection_string=azure_connection_string)
