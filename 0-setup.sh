@@ -21,6 +21,7 @@ echo "Installing speedtest python sdk - probably CLI apps in ~/.local/bin"
 # make python3 by the default and install speedtest library
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 2
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 3
+# https://linuxconfig.org/how-to-run-a-speed-test-from-command-line-using-speedtest-cli#h6-using-the-csv-or-json-formats-for-the-results
 pip3 install speedtest-cli
 
 echo "Installing Azure Application Insights tooling"

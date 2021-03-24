@@ -36,7 +36,7 @@ def run_test(should_download, should_upload, should_share, tracer):
         s.get_servers(servers)
     tac = time.perf_counter()
     with tracer.span(name="get_best_servers") as span:
-        s.get_best_server()
+        s.get_best_server()     # pings all the servers to see the one with lowest latency
     toc = time.perf_counter()    
 
     if (should_download) : 
