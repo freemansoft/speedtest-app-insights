@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 # Actual speed test
 #---------------------------------------------------
 def run_test(should_download, should_upload, should_share, tracer):
+    # Other Tracing spans will be children to this one
     with tracer.span(name="main") as span:
         servers = []
         # If you want to test against a specific server

@@ -39,7 +39,6 @@ tracer = register_azure_exporter_with_tracer(load_insights_key())
 #---------------------------------------------------
 # Run the test
 #---------------------------------------------------
-# Other Tracing spans will be children to this one
 results_speed, results_setup = run_test(args.upload, args.download, args.share, tracer)
 write_json(results_speed,args.outfile)
 # augment the results with the setup times
