@@ -17,12 +17,21 @@ if [ x = y ] ; then
 fi
 
 # This is all that was needed to test on windows so it may be all we actually need
-echo "Installing speedtest python sdk - probably CLI apps in ~/.local/bin"
+echo "Configuring python"
 # make python3 by the default and install speedtest library
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 2
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 3
+sudo apt install python3-pip
+
+echo "Installing speedtest python sdk - probably CLI apps in ~/.local/bin"
 # https://linuxconfig.org/how-to-run-a-speed-test-from-command-line-using-speedtest-cli#h6-using-the-csv-or-json-formats-for-the-results
 pip3 install speedtest-cli
+
+echo "Installing dnspython for future work"
+pip3 install dnspython
+pip3 install cymruwhois
+#echo "Installing DNS diag for future work - propbably in ~/.local/bin"
+#pip3 install dnsdiag
 
 echo "Installing Azure Application Insights tooling"
 python3 -m pip install opencensus-ext-azure
