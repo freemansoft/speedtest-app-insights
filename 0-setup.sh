@@ -23,15 +23,18 @@ sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 2
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 3
 sudo apt install python3-pip
 
+# TODO put this in requirements.txt!
 echo "Installing speedtest python sdk - probably CLI apps in ~/.local/bin"
 # https://linuxconfig.org/how-to-run-a-speed-test-from-command-line-using-speedtest-cli#h6-using-the-csv-or-json-formats-for-the-results
 pip3 install speedtest-cli
 
-echo "Installing dnspython for future work"
-pip3 install dnspython
-pip3 install cymruwhois
-#echo "Installing DNS diag for future work - propbably in ~/.local/bin"
-#pip3 install dnsdiag
+# echo "Installing dnspython for future work"
+# pip3 install dnspython
+# pip3 install cymruwhois
+# cheating and installing dnsdiag which I know will install compatible dnspython and cymrwhois
+echo "Installing DNS diag for future work - propbably in ~/.local/bin"
+pip3 install dnsdiag
+# could test with dnseval --json - www.apple.com
 
 echo "Installing Azure Application Insights tooling"
 python3 -m pip install opencensus-ext-azure
