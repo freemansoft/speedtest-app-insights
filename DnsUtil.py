@@ -16,8 +16,9 @@ from util.dns import PROTO_UDP
 # code based on https://github.com/farrokhi/dnsdiag/blob/master/dnseval.py
 
 # NOTE: future work - send this to application insights
+# TODO: This accepts a list of dns servers but returns after the first one
 # does a dns lookup and returns the times
-def main(query_host_name, should_force_miss):
+def main(dns_server_list, query_host_name, should_force_miss):
 
     # defaults
     rdatatype = "A"
@@ -29,10 +30,10 @@ def main(query_host_name, should_force_miss):
     use_edns = True
     want_dnssec = False
 
-    f = dns.resolver.get_default_resolver().nameservers
+    # dns_server_list = dns.resolver.get_default_resolver().nameservers
     # print(f)
 
-    for server in f:
+    for server in dns_server_list:
         # check if we have a valid dns server address
         if server.lstrip() == "":  # deal with empty lines
             continue
@@ -67,7 +68,7 @@ def main(query_host_name, should_force_miss):
                 force_miss=should_force_miss,
                 want_dnssec=want_dnssec,
             )
-
+            # TODO this is broken. It returns after the fist server is tested
             return (
                 retval.rcode,
                 retval.r_min,
@@ -85,7 +86,7 @@ def main(query_host_name, should_force_miss):
 
 if __name__ == "__main__":
     return_code, ping_min, ping_average, ping_max, ping_stddev = main(
-        "wikipedia.org", False
+        ["8.8.4.4", "8.8.8.8"], "wikipedia.org", False
     )
 
     # sample times on fios are return_code:0     min=0.408       avg=0.500       max=0.730       std-dev=0.090
