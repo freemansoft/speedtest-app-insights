@@ -154,7 +154,39 @@ def tag_and_record(mmap, metrics_info):
 
 
 def push_dns_metrics(ping_min, ping_average, ping_max, ping_stddev):
-    print("we're here ",ping_min, ping_average, ping_max, ping_stddev)
+    # standard opencensus and azure exporter setup    
+    stats = stats_module.stats
+    view_manager = stats.view_manager
+    stats_recorder = stats.stats_recorder
+    mmap = stats_recorder.new_measurement_map()
+    
+    # perf data gathered while running tests
+    ping_min_measure =    create_metric_measure("dns_min", "Minimum DNS time", "ms")
+    ping_avg_measure =    create_metric_measure("dns_avg", "Average DNS time", "ms")
+    ping_max_measure =    create_metric_measure("dns_max", "Maximum DNS time", "ms")
+    ping_stddev_measure = create_metric_measure("dns_stddev", "Standard Deviation DNS time", "ms")
+
+    # we always monitor ping and optionally capture upload or download
+    # add setup metrics
+    create_metric_view(view_manager=view_manager, name="ST DNS Min",    description="DNS ping min time",     measure=ping_min_measure)
+    create_metric_view(view_manager=view_manager, name="ST DNS Avg",    description="DNS ping average time", measure=ping_avg_measure)
+    create_metric_view(view_manager=view_manager, name="ST DNS Max",    description="DNS ping max time",     measure=ping_max_measure)
+    create_metric_view(view_manager=view_manager, name="ST DNS StdDev", description="DNS ping standard deviation", measure=ping_stddev_measure)
+
+    # lets add the exporter and register our azure key with the exporter
+    azure_instrumentation_key = load_insights_key()
+    register_azure_exporter_with_view_manager(view_manager,azure_instrumentation_key)
+
+    # views(measure, view)  events(measure,metric)
+    record_metric_float(mmap, ping_min,     ping_min_measure)
+    record_metric_float(mmap, ping_average, ping_avg_measure)
+    record_metric_float(mmap, ping_max,     ping_max_measure)
+    record_metric_float(mmap, ping_stddev,  ping_stddev_measure)
+
+    # could add tags here 
+    # this will throw a 400 if the instrumentation key isn't set
+    mmap.record()
+    return mmap
 
 # Only consumes sample data.  Do not use in REAL app
 def AppInsightsMain():
