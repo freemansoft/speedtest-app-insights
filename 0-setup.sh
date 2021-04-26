@@ -32,9 +32,17 @@ pip3 install speedtest-cli
 # pip3 install dnspython
 # pip3 install cymruwhois
 # cheating and installing dnsdiag which I know will install compatible dnspython and cymrwhois
+# need 2.0.1 or later - so git clone and install instead of relying on distribution
 echo "Installing DNS diag for future work - propbably in ~/.local/bin"
-pip3 install dnsdiag
+# pip3 install dnsdiag
 # could test with dnseval --json - www.apple.com
+
+# have to do this if on ARM / like Raspberry Pi - so just do it for all to get the latest
+git clone https://github.com/farrokhi/dnsdiag.git
+cd dnsdiag
+pip3 install -r requirements.txt .
+cd ..
+rm -rf dnsdiag
 
 echo "Installing Azure Application Insights tooling"
 python3 -m pip install opencensus-ext-azure

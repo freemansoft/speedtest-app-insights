@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import datetime
 import getopt
 import ipaddress
@@ -10,15 +12,21 @@ import dns.rcode
 import dns.rdatatype
 import dns.resolver
 
+# these come from dnsdiag - we're making use of their internal modules
 import util.dns
 from util.dns import PROTO_UDP
+
+from AppInsights import *
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("DnsUtil")
 
 # code based on https://github.com/farrokhi/dnsdiag/blob/master/dnseval.py
 
 # NOTE: future work - send this to application insights
 # TODO: This accepts a list of dns servers but returns after the first one
 # does a dns lookup and returns the times
-def main(dns_server_list, query_host_name, should_force_miss):
+def ping_me(dns_server_list, query_host_name, should_force_miss):
 
     # defaults
     rdatatype = "A"
@@ -85,12 +93,22 @@ def main(dns_server_list, query_host_name, should_force_miss):
 
 
 if __name__ == "__main__":
-    return_code, ping_min, ping_average, ping_max, ping_stddev = main(
+    return_code, ping_min, ping_average, ping_max, ping_stddev = ping_me(
         ["8.8.4.4", "8.8.8.8"], "wikipedia.org", False
     )
 
-    # sample times on fios are return_code:0     min=0.408       avg=0.500       max=0.730       std-dev=0.090
+    # sample times on FIOS DC and Medicom DE are 
+    #     FIOS:     return_code:0     min=0.408       avg=0.500       max=0.730       std-dev=0.090
+    #     MediaCom: return_code:0     min=35.032      avg=37.418      max=39.587      std-dev=1.654   
+    #     MediaCom: return_code:0     min=35.013      avg=42.450      max=59.062      std-dev=7.504   
     print(
         "return_code:%d     min=%-8.3f    avg=%-8.3f    max=%-8.3f    std-dev=%-8.3f"
         % (return_code, ping_min, ping_average, ping_max, ping_stddev)
     )
+
+    if return_code == 0: 
+        # Enable opencensus tracing. Create a new tracer for every run / loop.
+        tracer = register_azure_exporter_with_tracer(load_insights_key())
+        # use the functions inside AppInsights.py
+        push_dns_metrics(ping_min=ping_min, ping_average=ping_average, ping_max=ping_max, ping_stddev=ping_stddev)
+

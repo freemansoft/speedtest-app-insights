@@ -152,6 +152,10 @@ def tag_and_record(mmap, metrics_info):
     logger.debug("tagmap: %s", tagmap.map)
     mmap.record(tagmap)
 
+
+def push_dns_metrics(ping_min, ping_average, ping_max, ping_stddev):
+    print("we're here ",ping_min, ping_average, ping_max, ping_stddev)
+
 # Only consumes sample data.  Do not use in REAL app
 def AppInsightsMain():
     sample_dict = json.loads(sample_string)

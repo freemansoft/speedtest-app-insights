@@ -40,6 +40,7 @@ tracer = register_azure_exporter_with_tracer(load_insights_key())
 # Run the test
 #---------------------------------------------------
 results_speed, results_setup = run_test(args.upload, args.download, args.share, tracer)
+# write out just the standard speedtest results
 write_json(results_speed,args.outfile)
 # augment the results with the setup times
 results_combined = Merge(results_speed.dict(),results_setup)
