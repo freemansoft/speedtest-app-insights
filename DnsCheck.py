@@ -39,7 +39,7 @@ def ping_me(dns_server_list, query_host_name, should_force_miss):
     want_dnssec = False
 
     # dns_server_list = dns.resolver.get_default_resolver().nameservers
-    # print(f)
+    # logger.info("%s",f)
 
     for server in dns_server_list:
         # check if we have a valid dns server address
@@ -52,7 +52,7 @@ def ping_me(dns_server_list, query_host_name, should_force_miss):
             try:
                 resolver = socket.getaddrinfo(server, port=None)[1][4][0]
             except OSError:
-                print("Error: cannot resolve hostname:", server)
+                logger.warn("Error: cannot resolve hostname: %s", server)
                 resolver = None
             except Exception:
                 pass
@@ -88,7 +88,7 @@ def ping_me(dns_server_list, query_host_name, should_force_miss):
         except SystemExit:
             break
         except Exception as e:
-            print("%s: %s" % (server, e))
+            logger.error("%s: %s" % (server, e))
             continue
 
 
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     #     FIOS:     return_code:0     min=0.408       avg=0.500       max=0.730       std-dev=0.090
     #     MediaCom: return_code:0     min=35.032      avg=37.418      max=39.587      std-dev=1.654   
     #     MediaCom: return_code:0     min=35.013      avg=42.450      max=59.062      std-dev=7.504   
-    print(
+    logger.info(
         "return_code:%d     min=%-8.3f    avg=%-8.3f    max=%-8.3f    std-dev=%-8.3f"
         % (return_code, ping_min, ping_average, ping_max, ping_stddev)
     )
