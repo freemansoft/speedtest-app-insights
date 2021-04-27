@@ -20,48 +20,50 @@ logger = logging.getLogger(__name__)
 # Actual speed test
 #---------------------------------------------------
 def run_test(should_download, should_upload, should_share, tracer):
-    servers = []
-    # If you want to test against a specific server
-    # servers = [1234]
+    # Other Tracing spans will be children to this one
+    with tracer.span(name="main") as span:
+        servers = []
+        # If you want to test against a specific server
+        # servers = [1234]
 
-    threads = None
-    # If you want to use a single threaded test
-    #threads = 1
+        threads = None
+        # If you want to use a single threaded test
+        #threads = 1
 
-    # geeting the servers does a ping
-    s = speedtest.Speedtest() 
-    logger.info("getting servers")
-    tic = time.perf_counter()
-    with tracer.span(name="get_servers") as span:
-        s.get_servers(servers)
-    tac = time.perf_counter()
-    with tracer.span(name="get_best_servers") as span:
-        s.get_best_server()
-    toc = time.perf_counter()    
+        # getting the servers does a ping
+        s = speedtest.Speedtest() 
+        logger.info("getting servers")
+        tic = time.perf_counter()
+        with tracer.span(name="get_servers") as span:
+            s.get_servers(servers)
+        tac = time.perf_counter()
+        with tracer.span(name="get_best_servers") as span:
+            s.get_best_server()
+        toc = time.perf_counter()    
 
-    if (should_download) : 
-        with tracer.span(name="measure_download") as span:
-            logger.info("running download test")
-            s.download(threads=threads)
-    else :
-        logger.info("skipping download test")
+        if (should_download) : 
+            with tracer.span(name="measure_download") as span:
+                logger.info("running download test")
+                s.download(threads=threads)
+        else :
+            logger.info("skipping download test")
 
-    if (should_upload) :
-        with tracer.span(name="measure_upload") as span:
-            logger.info("running upload test")
-            s.upload(threads=threads)
-    else :
-        logger.info("skipping upload test")
+        if (should_upload) :
+            with tracer.span(name="measure_upload") as span:
+                logger.info("running upload test")
+                s.upload(threads=threads)
+        else :
+            logger.info("skipping upload test")
 
-    if (should_share) :
-        with tracer.span(name="sharing_is_caring") as span:
-            logger.info("sharing results - results sharing may be broken 03/03/2021")
-            s.results.share()
-    
-    # calculate and return the setup time which is not reported by speedtest
-    # convert seconds based times to msec
-    setup_time_dict = {'get_servers':(tac-tic)*1000.0,'get_best_servers':(toc-tac)*1000.0}
-    return s.results, setup_time_dict
+        if (should_share) :
+            with tracer.span(name="sharing_is_caring") as span:
+                logger.info("sharing results - results sharing may be broken 03/03/2021")
+                s.results.share()
+        
+        # calculate and return the setup time which is not reported by speedtest
+        # convert seconds based times to msec
+        setup_time_dict = {'get_servers':(tac-tic)*1000.0,'get_best_servers':(toc-tac)*1000.0}
+        return s.results, setup_time_dict
 
 #---------------------------------------------------
 #

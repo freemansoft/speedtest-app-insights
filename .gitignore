@@ -3,3 +3,7 @@ env/
 __pycache__/
 *.log
 *.logs
+whois.cache
+results.json
+dnsdiag/
+

@@ -39,13 +39,12 @@ tracer = register_azure_exporter_with_tracer(load_insights_key())
 #---------------------------------------------------
 # Run the test
 #---------------------------------------------------
-# Other Tracing spans will be children to this one
-with tracer.span(name="main") as span:
-    results_speed, results_setup = run_test(args.upload, args.download, args.share, tracer)
-    write_json(results_speed,args.outfile)
-    # augment the results with the setup times
-    results_combined = Merge(results_speed.dict(),results_setup)
-    logger.debug("results combined: %s", results_combined)
+results_speed, results_setup = run_test(args.upload, args.download, args.share, tracer)
+# write out just the standard speedtest results
+write_json(results_speed,args.outfile)
+# augment the results with the setup times
+results_combined = Merge(results_speed.dict(),results_setup)
+logger.debug("results combined: %s", results_combined)
 # use the functions inside AppInsights.py
 push_speedtest_metrics(results_combined)
 
