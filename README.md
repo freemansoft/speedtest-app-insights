@@ -107,5 +107,9 @@ The speed test team changes something in their API in April 2021.
 This changed some format that broke speedtest.py.  You need either the 2.1.3 version of the speedtest.  Grab it with pip3 or if not available then the following assuming you run pip not as root
 
 ```
-sudo wget https://raw.githubusercontent.com/sivel/speedtest-cli/v2.1.3/speedtest.py -O ~/.local/lib/python3.7/site-packages/speedtest.py 
+wget https://raw.githubusercontent.com/sivel/speedtest-cli/v2.1.3/speedtest.py -O ~/.local/lib/python3.<version>/site-packages/speedtest.py 
+```
+Ex:
+```
+wget https://raw.githubusercontent.com/sivel/speedtest-cli/v2.1.3/speedtest.py -O ~/.local/lib/python3.7/site-packages/speedtest.py 
 ```

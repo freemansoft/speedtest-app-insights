@@ -27,8 +27,8 @@ sudo apt install python3-pip
 echo "Installing speedtest python sdk - probably CLI apps in ~/.local/bin"
 # https://linuxconfig.org/how-to-run-a-speed-test-from-command-line-using-speedtest-cli#h6-using-the-csv-or-json-formats-for-the-results
 pip3 install speedtest-cli
-# CLI api changed requiring an update. Uncomment if v2.1.3 or later not available.  
-#sudo wget https://raw.githubusercontent.com/sivel/speedtest-cli/v2.1.3/speedtest.py -O ~/.local/lib/python3.7/site-packages/speedtest.py 
+# CLI api changed requiring an update. Uncomment if v2.1.3 or later not available.  Assumes pip3 not run as sudo
+# wget https://raw.githubusercontent.com/sivel/speedtest-cli/v2.1.3/speedtest.py -O ~/.local/lib/python3.7/site-packages/speedtest.py 
 
 # echo "Installing dnspython for future work"
 # pip3 install dnspython
