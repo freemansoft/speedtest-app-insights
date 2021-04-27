@@ -36,3 +36,6 @@ CRONTAB_LINE_UP_DOWN="$MINUTES_UP_DOWN $HOURS_UP_DOWN $DAYS_OF_MONTH * $DAYS_OF_
 (crontab -l | grep -v -F $PYTHON_SCRIPT ; echo "$CRONTAB_LINE_PING" ; echo "$CRONTAB_LINE_UP_DOWN") | crontab -
 echo "New crontab for '$Me' is"
 crontab -l
+
+# uncomment this line to get the cron output in your mailbox
+#sudo apt-get install postfix
