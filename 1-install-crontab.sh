@@ -39,3 +39,7 @@ crontab -l
 
 # uncomment this line to get the cron output in your mailbox
 #sudo apt-get install postfix
+
+# this really isn't ready for primetime
+DNS_SCRIPT="DnsCheck.py"
+CRONTAB_LINE_DNS="$MINUTES_PING_IT $HOURS_PING_IT $DAYS_OF_MONTH * $DAYS_OF_WEEK cd $DIR && python3 $DNS_SCRIPT $REDIRECT_LOGS"
