@@ -18,6 +18,10 @@ OPTIONS_UP_DOWN="--upload --download"
 MINUTES_PING_IT="*/3"
 HOURS_PING_IT="*"
 
+# ping test every 3 minutes
+MINUTES_DNS_IT="*/6"
+HOURS_DNS_IT="*"
+
 # up down test once per day
 MINUTES_UP_DOWN="13"
 HOURS_UP_DOWN="*/4"
@@ -42,4 +46,7 @@ crontab -l
 
 # this really isn't ready for primetime
 DNS_SCRIPT="DnsCheck.py"
-CRONTAB_LINE_DNS="$MINUTES_PING_IT $HOURS_PING_IT $DAYS_OF_MONTH * $DAYS_OF_WEEK cd $DIR && python3 $DNS_SCRIPT $REDIRECT_LOGS"
+CRONTAB_LINE_DNS="$MINUTES_DNS_IT $HOURS_DNS_IT $DAYS_OF_MONTH * $DAYS_OF_WEEK cd $DIR && python3 $DNS_SCRIPT $REDIRECT_LOGS"
+(crontab -l | grep -v -F $DNS_SCRIPT ; echo "$CRONTAB_LINE_DNS" ) | crontab -
+echo "New crontab for '$Me' is"
+crontab -l

@@ -101,6 +101,13 @@ Some Raspberry Pi models are speed limited on their ethernet. magpi posted ether
 * Azure Dashboard
     * https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents
 
+# Experimental Features
+## DnsCheck.py
+This module uses dnspython to do a dns check. I found that my network experience was heavily driven by my DNS times.
+
+It should install fine but you can see in 0-setup.sh that there is a bit of overhead to get this working
+because it depends on a library that is best installed from git.
+
 # Release Notes
 
 The speed test team changes something in their API in April 2021. 
