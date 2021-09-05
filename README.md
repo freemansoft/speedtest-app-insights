@@ -12,14 +12,17 @@ This project captures internet connection statistics and sends them to an Azure 
 1. Python3
 1. An internet connection
 1. An account in Azure that can run the free tier of _Azure Application Insights_.  See references below for instructions.
-    1. You can comment out the AppInsights.py call at the bottom of NetCheck.py if you don't wish to create a dashboard in _Azure Application Insights_
+    1. You can comment out the `AppInsights.py` call at the bottom of `NetCheck.py` if you don't wish to create a dashboard in _Azure Application Insights_
+
+# TODO 
+1. Create script that instiates Application Insights so you don't have to use https://portal.azure.com
 
 # Scripts in this repository
 | Script | Purpose |
 | - | - |
-| 0-setup.sh | downloads the Speedtest.net CLI, configures Python |
-| 1-install-crontab.sh | Installs a crontab entry that runs NetCheck.py on a regular basis |
-| 3-remove-crontab.sh | removes this user's NetCheck.py crontab entries | 
+| 1-setup-host.sh | downloads the Speedtest.net CLI, configures Python |
+| 2-install-crontab.sh | Installs a crontab entry that runs NetCheck.py on a regular basis |
+| 11-remove-crontab.sh | removes this user's NetCheck.py crontab entries | 
 | | |
 | NetCheck.py | Program that invokes the test code in SpeedTest.py |
 | SpeedTest.py | runs the speedtest-cli and records metrics |
@@ -27,9 +30,13 @@ This project captures internet connection statistics and sends them to an Azure 
 | setup.ps1 | Windows setup program. Will prompt to install python3 via Windows store |
 
 # Usage - NetCheck and Azure App Insights
-1. Run `0-setup.sh` to install dependencies
-1. Get an Azure account and log in
-    1. Register in Application Insights to get an Application Insights key
+1. Run `1-setup-host.sh` to install dependencies
+1. Create Application Inights and get key
+    1. Get an Azure account 
+    1. Log into https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents 
+    1. Register in Application Insights as a _Workspace-based Application Insights_ . 
+        1. There is a DefaultWorkspace in each region. You can use that.
+    1. Get an Application Insights _Instrumentation Key_
     1. Copy config.ini.template to config.ini
     1. Replace the dummy key in config.ini with yoru new key
 1. Run `NetCheck.py`
@@ -42,8 +49,8 @@ This project captures internet connection statistics and sends them to an Azure 
     
 ## Installing in crontab to run repeately
 1. cd into this directory
-1. Verify the cycle times you wish in `1-install-crontab.sh`.  The file is in crontab format.
-1. run `1-install-crontab.sh`
+1. Verify the cycle times you wish in `2-install-crontab.sh`.  The file is in crontab format.
+1. run `2-install-crontab.sh`
 
 # Example speedtest.net cli output
 Raspberry Pi3 on 1GB port on 1GB FIOS internet service.
@@ -93,6 +100,7 @@ Some Raspberry Pi models are speed limited on their ethernet. magpi posted ether
 * Speedtest Python library
     * https://github.com/sivel/speedtest-cli
 * Azure App Insights docs
+    * https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-workspace-resource
     * https://docs.microsoft.com/en-us/azure/azure-monitor/app/opencensus-python
     * https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource
 * App Insights Open Census Python exporter
@@ -105,7 +113,7 @@ Some Raspberry Pi models are speed limited on their ethernet. magpi posted ether
 ## DnsCheck.py
 This module uses dnspython to do a dns check. I found that my network experience was heavily driven by my DNS times.
 
-It should install fine but you can see in 0-setup.sh that there is a bit of overhead to get this working
+It should install fine but you can see in 1-setup-host.sh that there is a bit of overhead to get this working
 because it depends on a library that is best installed from git.
 
 # Release Notes
