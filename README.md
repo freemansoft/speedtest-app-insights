@@ -15,7 +15,7 @@ This project captures internet connection statistics and sends them to an Azure 
     1. You can comment out the `AppInsights.py` call at the bottom of `NetCheck.py` if you don't wish to create a dashboard in _Azure Application Insights_
 
 # TODO 
-1. Create script that instiates Application Insights so you don't have to use https://portal.azure.com
+1. Create script that instantiates Application Insights so you don't have to use https://portal.azure.com
 
 # Scripts in this repository
 | Script | Purpose |
@@ -24,22 +24,27 @@ This project captures internet connection statistics and sends them to an Azure 
 | 2-install-crontab.sh | Installs a crontab entry that runs NetCheck.py on a regular basis |
 | 11-remove-crontab.sh | removes this user's NetCheck.py crontab entries | 
 | | |
-| NetCheck.py | Program that invokes the test code in SpeedTest.py |
-| SpeedTest.py | runs the speedtest-cli and records metrics |
+| NetCheck.py | The main program. Program that invokes the test code in SpeedTest.py |
+| SpeedTest.py | SpeedTest.net adapter. Runs the speedtest-cli and records metrics |
 | AppInsights.py | OpenCensus library wrapper used to send metrics to Azure Application Insights | 
-| setup.ps1 | Windows setup program. Will prompt to install python3 via Windows store |
+| setup.ps1 | Windows Python setup program. Will prompt to install python3 via Windows store |
 
 # Usage - NetCheck and Azure App Insights
 1. Run `1-setup-host.sh` to install dependencies
 1. Create Application Inights and get key
     1. Get an Azure account 
     1. Log into https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents 
-    1. Register in Application Insights as a _Workspace-based Application Insights_ . 
-        1. There is a DefaultWorkspace in each region. You can use that.
-    1. Get an Application Insights _Instrumentation Key_
+    1. Register in Application Insights https://portal.azure.com/#create/Microsoft.AppInsights
+        1. Select your subscription
+        1. Create a resource group or use an existing one
+        1. Select an instance name. 
+        1. Select a Region.
+        1. Select _Resource Mode_ as a _Workspace-based. 
+        1. Seelct the Log Analytics Workspace. There is a DefaultWorkspace in each region. You can use that.
+    1. Get an Application Insights _Instrumentation Key_ from the Portal.  It is on the Application Insights home page in the upper right corner.
     1. Copy config.ini.template to config.ini
-    1. Replace the dummy key in config.ini with yoru new key
-1. Run `NetCheck.py`
+    1. Replace the dummy key in config.ini with your new key
+1. Run main program `NetCheck.py` There are several options
   1. Run with only a ping check `python3 NetCheck.py `
   1. Run with ping, upload and download `python3 NetCheck.py --download --upload`
   1. Get help with `NetCheck.py --help`
