@@ -45,15 +45,33 @@ This is _partially correct_ explanation of OpenCensus events and Azure bindings
     1. The view list has `views` keyed by `measure`
     1. The events have `recordings` keyed by `measure`
 
-### Metrics in AppInsight Dashboard
+### Creating Graph Panes from Metrics
 Metrics aggregations are visible as `metrics` in the Applicaton Insights under _Monitoring / Metrics _
 1. `Home > Application Insights > _your resource_ ` 
-1. Right side-bar `Monitoring` / `Metrics`
+1. Left side-bar `Monitoring / Metrics`
+1. Query with something like
+    ```
+    Scope -> Your App Insights name
+    Metric Name Space --> Log-based metrics
+    Metric --> one of the speedtest ST metrics like "ST Ping time"
+    Aggregation --> min / max / average?
+    ```
+1. If you have more than one device and want to see them slit out on the graph pane then add a split by `Cloud role instance`
 
+### Dashboards
+Graph panes can be added to dashboards.  Dashboards are sort of global and work across App Insights instances across subscriptions.
+1. Add the graph pane created above to a `Dashboard`.  You can add to an existing `Dashboard` or create a new one
+
+You can see that Dashboards have a different scope when you look at their URL which is different from the rest of the Azure Portal.
+> https://portal.azure.com/#@<Azure AD Domain-Tenant>/dashboard/private
+
+### Seing Metrics in Logs
 Individual _Metrics Events_ can also be seen under _Monitoring / Logs_
 1. `Home > Application Insights > _your resource_ ` 
-1. Right side-bar `Monitoring` / `Logs`
+1. Left side-bar `Monitoring / Logs`
+1. _Need to expand this section_
 
+#### Metrics currently created in this package
 | Metric Namespace | SpeedTest Metric | Description |
 | - | - | - |
 | `Log Based Metrics` | `ST Ping Time` | ping time as reported by SpeedTest |

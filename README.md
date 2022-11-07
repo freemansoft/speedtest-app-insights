@@ -43,7 +43,10 @@ This project captures internet connection statistics and sends them to an Azure 
         1. Seelct the Log Analytics Workspace. There is a DefaultWorkspace in each region. You can use that.
     1. Get an Application Insights _Instrumentation Key_ from the Portal.  It is on the Application Insights home page in the upper right corner.
     1. Copy config.ini.template to config.ini
-    1. Replace the dummy key in config.ini with your new key
+    1. Replace the dummy key in config.ini with your new key.  It should look something like
+    ```
+    azure_instrumentation_key=InstrumentationKey=0000000-0000-0000-0000-00000000000;IngestionEndpoint=https://westus2-1.in.applicationinsights.azure.com/
+    ```
 1. Run main program `NetCheck.py` There are several options
   1. Run with only a ping check `python3 NetCheck.py `
   1. Run with ping, upload and download `python3 NetCheck.py --download --upload`
