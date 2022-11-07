@@ -97,18 +97,22 @@ if __name__ == "__main__":
         ["8.8.4.4", "8.8.8.8"], "wikipedia.org", False
     )
 
-    # sample times on FIOS DC and Medicom DE are 
+    # sample times on FIOS DC and Medicom DE are
     #     FIOS:     return_code:0     min=0.408       avg=0.500       max=0.730       std-dev=0.090
-    #     MediaCom: return_code:0     min=35.032      avg=37.418      max=39.587      std-dev=1.654   
-    #     MediaCom: return_code:0     min=35.013      avg=42.450      max=59.062      std-dev=7.504   
+    #     MediaCom: return_code:0     min=35.032      avg=37.418      max=39.587      std-dev=1.654
+    #     MediaCom: return_code:0     min=35.013      avg=42.450      max=59.062      std-dev=7.504
     logger.info(
         "return_code:%d     min=%-8.3f    avg=%-8.3f    max=%-8.3f    std-dev=%-8.3f"
         % (return_code, ping_min, ping_average, ping_max, ping_stddev)
     )
 
-    if return_code == 0: 
+    if return_code == 0:
         # Enable opencensus tracing. Create a new tracer for every run / loop.
         tracer = register_azure_exporter_with_tracer(load_insights_key())
         # use the functions inside AppInsights.py
-        push_dns_metrics(ping_min=round(ping_min,3), ping_average=round(ping_average,3), ping_max=round(ping_max,3), ping_stddev=round(ping_stddev,3))
-
+        push_dns_metrics(
+            ping_min=round(ping_min, 3),
+            ping_average=round(ping_average, 3),
+            ping_max=round(ping_max, 3),
+            ping_stddev=round(ping_stddev, 3),
+        )
