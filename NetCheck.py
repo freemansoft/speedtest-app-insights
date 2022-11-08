@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 import argparse
-import speedtest
 import json
-import os
-import time
+from AppInsights import *
 from SpeedTest import *
 
 # ---------------------------
@@ -72,13 +70,13 @@ write_json(results_speed, args.outfile)
 results_combined = Merge(results_speed.dict(), results_setup)
 logger.debug("results combined: %s", results_combined)
 # use the functions inside AppInsights.py
-push_speedtest_metrics(results_combined)
+push_azure_speedtest_metrics(results_combined)
 
 # ---------------------------------------------------
 # We route the verbose log output to the ApplicationInsights logs.
 # ---------------------------------------------------
 if args.verbose:
-    # This program exits after one execution so only these logs end up in Application insights.
+    # This program exits after one execution so only these log statements end up in Application insights.
     register_azure_handler_with_logger(logger, load_insights_key())
     logger.info('{ "combined_data": %s }', json.dumps(results_combined, sort_keys=True))
     logger.debug(

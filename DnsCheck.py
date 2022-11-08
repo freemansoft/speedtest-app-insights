@@ -1,16 +1,7 @@
 #!/usr/bin/env python3
 
-import datetime
-import getopt
 import ipaddress
-import json
-import os
 import socket
-import sys
-
-import dns.rcode
-import dns.rdatatype
-import dns.resolver
 
 # these come from dnsdiag - we're making use of their internal modules
 import util.dns
@@ -110,7 +101,7 @@ if __name__ == "__main__":
         # Enable opencensus tracing. Create a new tracer for every run / loop.
         tracer = register_azure_exporter_with_tracer(load_insights_key())
         # use the functions inside AppInsights.py
-        push_dns_metrics(
+        push_azure_dns_metrics(
             ping_min=round(ping_min, 3),
             ping_average=round(ping_average, 3),
             ping_max=round(ping_max, 3),

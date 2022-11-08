@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-import argparse
 import speedtest
 import json
-import os
 import time
-from AppInsights import *
+import logging
 
 # ---------------------------
 # TODO add DNS lookup timing
