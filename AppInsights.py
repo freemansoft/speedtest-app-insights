@@ -104,7 +104,8 @@ def create_metric_view(view_manager, name, description, measure):
     view_manager.register_view(ping_view)
 
 
-def push_azure_speedtest_metrics(json_data):
+# return: measurement map - primarily for testing
+def push_azure_speedtest_metrics(json_data, azure_connection_string):
     # standard opencensus and azure exporter setup
     stats = stats_module.stats
     view_manager = stats.view_manager
@@ -167,8 +168,7 @@ def push_azure_speedtest_metrics(json_data):
         )
 
     # lets add the exporter and register our azure key with the exporter
-    azure_instrumentation_key = load_insights_key()
-    register_azure_exporter_with_view_manager(view_manager, azure_instrumentation_key)
+    register_azure_exporter_with_view_manager(view_manager, azure_connection_string)
 
     # views(measure, view)  events(measure,metric)
     # setup times
@@ -203,7 +203,9 @@ def tag_and_record(mmap, metrics_info):
     mmap.record(tagmap)
 
 
-def push_azure_dns_metrics(ping_min, ping_average, ping_max, ping_stddev):
+def push_azure_dns_metrics(
+    ping_min, ping_average, ping_max, ping_stddev, azure_connection_string
+):
     # standard opencensus and azure exporter setup
     stats = stats_module.stats
     view_manager = stats.view_manager
@@ -246,8 +248,7 @@ def push_azure_dns_metrics(ping_min, ping_average, ping_max, ping_stddev):
     )
 
     # lets add the exporter and register our azure key with the exporter
-    azure_instrumentation_key = load_insights_key()
-    register_azure_exporter_with_view_manager(view_manager, azure_instrumentation_key)
+    register_azure_exporter_with_view_manager(view_manager, azure_connection_string)
 
     # views(measure, view)  events(measure,metric)
     record_metric_float(mmap, ping_min, ping_min_measure)

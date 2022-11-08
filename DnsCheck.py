@@ -98,12 +98,14 @@ if __name__ == "__main__":
     )
 
     if return_code == 0:
+        azure_instrumentation_key = load_insights_key()
         # Enable opencensus tracing. Create a new tracer for every run / loop.
-        tracer = register_azure_exporter_with_tracer(load_insights_key())
+        tracer = register_azure_exporter_with_tracer(azure_instrumentation_key)
         # use the functions inside AppInsights.py
         push_azure_dns_metrics(
             ping_min=round(ping_min, 3),
             ping_average=round(ping_average, 3),
             ping_max=round(ping_max, 3),
             ping_stddev=round(ping_stddev, 3),
+            azure_connection_string=azure_instrumentation_key,
         )

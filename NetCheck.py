@@ -58,8 +58,9 @@ if args.download:
 if args.share:
     logger.info("result sharing enabled")
 
+azure_instrumentation_key = load_insights_key()
 # Enable opencensus tracing. Create a new tracer for every run / loop.
-tracer = register_azure_exporter_with_tracer(load_insights_key())
+tracer = register_azure_exporter_with_tracer(azure_instrumentation_key)
 # ---------------------------------------------------
 # Run the test
 # ---------------------------------------------------
@@ -70,14 +71,14 @@ write_json(results_speed, args.outfile)
 results_combined = Merge(results_speed.dict(), results_setup)
 logger.debug("results combined: %s", results_combined)
 # use the functions inside AppInsights.py
-push_azure_speedtest_metrics(results_combined)
+push_azure_speedtest_metrics(results_combined, azure_instrumentation_key)
 
 # ---------------------------------------------------
 # We route the verbose log output to the ApplicationInsights logs.
 # ---------------------------------------------------
 if args.verbose:
     # This program exits after one execution so only these log statements end up in Application insights.
-    register_azure_handler_with_logger(logger, load_insights_key())
+    register_azure_handler_with_logger(logger, azure_instrumentation_key)
     logger.info('{ "combined_data": %s }', json.dumps(results_combined, sort_keys=True))
     logger.debug(
         "as json: %s", json.dumps(results_speed.dict(), indent=2, sort_keys=True)
