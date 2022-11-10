@@ -9,21 +9,20 @@ Each data point is actualy sent as an event/log-message which means that it can 
 
 This program demonstrates the three different types of telemetry supported for Python Applications.
 
-| Telemetry sent with | Open Census Terms| Appears in Application Insights as |
-| - | - | - | 
-| Azure Monitor _trace exporter_   | trace and span | `dependencies` |
-| Azure Monitor _metrics exporter_ | metrics        | `customMetrics` |
-| Azure Monitor _log exporter_     | Python logger  | `traces` |
+| Telemetry sent with | Open Census Terms| Application Insights Table | Event information |
+| - | - | - | - |
+| Azure Monitor _trace exporter_   | trace and span | `dependencies` | Span duration of some code block in msec |
+| Azure Monitor _metrics exporter_ | metrics        | `customMetrics` | Values something returned by SpeedTest library convert to metric |
+| Azure Monitor _log exporter_     | Python logger  | `traces` | logger output when --verbose is set |
 
 # Metrics Dimensions
 The OpenCensus Exporters send various standard or custom dimensions as part of each event.
 
-## Standard Dimensions sent to Application Insights via all exporters
+## Standard Dimensions provided by _all_ exporters
 _as of 3/2021_
 The [azure exporter utils.py](https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py) sends a fixed set of properties to Application Insights that can be used in charts for **filtering** or **splitting**
-* Splitting is not supported on charts with multiple metrics. [See documentation](https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-charts)
 
-| Property Name | Populated With | Notes |
+| Property Name | Populated With | Probably Source |
 | - | - | - |
 | Application Version | `undefined` | n/a |
 | Authenticated User | `False` | n/a |
@@ -40,20 +39,21 @@ The [azure exporter utils.py](https://github.com/census-instrumentation/opencens
 | Source of synthetic traffic | `undefined` | n/a |
 | State or Province | State | ? |
 
-## Custom Dimensions sent to Application Insights by _Metrics_ exporter
-AppInsights.py adds a couple custom tags to the data. These show up as custom dimensions.  
+1. Splitting is not supported on charts with multiple metrics. [See documentation](https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-charts)
+1. You can break out each metric by host by **splitting** using the `Cloud Role Instance` dimension
 
-* CustomDimensions can be seen on the query screen results pane as a combined json structure. 
-* CustomDimensions must added explicitly to the results configuration
-* CustomDimensions can be used to filter in gauges.
-
-The speedtest program adds two `customDimension` properties.  You can see the `customDimension` subtree inside each custom metric
+## Custom Dimensions provided by the _Metrics_ exporter
+AppInsights.py adds two `customDimension` properties.  You can see the `customDimension` subtree inside each custom metric
 
 | Custom Dimension | Value |
 | - | - |
 | client_isp | client isp as reported by speedtest sdk |
 | server_host | speedtest server host as reported by speedtest sdk | 
 
+Notes:
+* CustomDimensions can be seen on the query screen results pane as a combined json structure. 
+* CustomDimensions are use case specific and must be explicitly to the results configuratio.
+* CustomDimensions can be used to filter in gauges.
 
 # Structure in the OpenCensus API and Application Insights metrics exporter
 This is _partially correct_ explanation of OpenCensus events and Azure bindings
