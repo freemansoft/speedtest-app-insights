@@ -88,6 +88,10 @@ Individual _Metrics Events_ can also be seen under _Monitoring / Logs_
 1. Left side-bar `Monitoring / Logs`
 1. Run a query for `customMetrics`
 
+![App Insights Custom Metrics Query](https://1.bp.blogspot.com/-ORzu-890fqU/YEP6Yutcq3I/AAAAAAAAEOY/1C8PvYrcswofeofRHXQ6Lz52NEaUfp9rACPcBGAYYCw/w640-h480/2021-03-04_7-25-06.png)
+
+[App Insights CustomMetrics Blog Article](https://joe.blog.freemansoft.com/2021/03/querying-python-metrics-custom-tags-as.html)
+
 Metrics currently created in this package:
 | Metric Namespace | SpeedTest Metric | Description |
 | - | - | - |
@@ -102,12 +106,16 @@ Metrics currently created in this package:
 | `Log Based metrics` | `ST DNS Max`           | DNS PIng Time metric |
 
 
-# _Log_ logging in Application Insight
+# _log_ messages in Application Insight
 The program can send a single line of output per run to the ApplicationInsights as `traces` in the Log export query screens
 Individual _log statements_ can be seen under _Monitoring / Logs_
 1. `Home > Application Insights > _your resource_ ` 
 1. Left side-bar `Monitoring / Logs`
 1. Run a query for `traces`
+
+![App Insights Traces Query](https://1.bp.blogspot.com/-4S7aouVd8V0/YEQ--6-W9gI/AAAAAAAAEQA/-_u3S9a9QEklWxJh2Nb79IlAQbs6goKVQCLcBGAsYHQ/w640-h480/2021-03-06_21-34-41.png)
+
+[App Insights Logging as Traces Blog Article](https://joe.blog.freemansoft.com/2021/03/querying-python-logs-azure-application.html)
 
 # _Tracing and Spans_ in Application Insight
 The program sends trace exports via the OpenCensus `Trace and Span` APIs.

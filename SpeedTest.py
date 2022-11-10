@@ -19,18 +19,18 @@ logger = logging.getLogger(__name__)
 # Actual speed test
 # ---------------------------------------------------
 def run_test(should_download, should_upload, should_share, tracer):
+    servers = []
+    # If you want to test against a specific server
+    # servers = [1234]
+
+    threads = None
+    # If you want to use a single threaded test
+    # threads = 1
+
     # Other Tracing spans will be children to this one
     with tracer.span(name="main") as span:
-        servers = []
-        # If you want to test against a specific server
-        # servers = [1234]
-
-        threads = None
-        # If you want to use a single threaded test
-        # threads = 1
-
         # getting the servers does a ping
-        s = speedtest.Speedtest()
+        s = speedtest.Speedtest(secure=1)
         logger.info("getting servers")
         tic = time.perf_counter()
         with tracer.span(name="get_servers") as span:

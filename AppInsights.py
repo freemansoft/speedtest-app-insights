@@ -27,7 +27,6 @@ from opencensus.ext.azure.log_exporter import AzureLogHandler
 from opencensus.ext.azure.trace_exporter import AzureExporter
 from opencensus.trace.samplers import AlwaysOnSampler
 from opencensus.trace.tracer import Tracer
-from opencensus.trace.span import SpanKind
 
 # log_prefix = os.path.basename(__file__) + ":"
 logging.basicConfig(level=logging.INFO)
@@ -49,16 +48,6 @@ def load_insights_key():
     return config["azure"]["azure_instrumentation_key"]
 
 
-# after this, everything sent to this view will end up in azure as a metric
-def register_azure_exporter_with_view_manager(view_manager, azure_connection_string):
-    # enable the Azure metrics exporter which talks to Azure
-    # standard metrics are CPU, memory, storage, etc.
-    exporter = metrics_exporter.new_metrics_exporter(
-        enable_standard_metrics=False, connection_string=azure_connection_string
-    )
-    view_manager.register_exporter(exporter)
-
-
 # call this if you want to send logs to Azure App Insight
 # after this, every log(warn) will end up in azure as a log event "trace" !"tracing"
 def register_azure_handler_with_logger(logger, azure_connection_string):
@@ -74,13 +63,13 @@ def register_azure_exporter_with_tracer(azure_connection_string):
     return tracer
 
 
-def create_metric_measure(metric_name, metric_description, metric_unit):
+def _create_metric_measure(metric_name, metric_description, metric_unit):
     # The description of our metric
     measure = measure_module.MeasureFloat(metric_name, metric_description, metric_unit)
     return measure
 
 
-def record_metric_float(mmap, value, measure):
+def _record_metric_float(mmap, value, measure):
     # data from the speed test
     mmap.measure_float_put(measure, value)
     # the measure becomes the key to the measurement map
@@ -92,7 +81,7 @@ def record_metric_float(mmap, value, measure):
     )
 
 
-def create_metric_view(view_manager, name, description, measure):
+def _create_metric_view(view_manager, name, description, measure):
     # view must be registered prior to record
     ping_view = view_module.View(
         name=name,
@@ -104,6 +93,28 @@ def create_metric_view(view_manager, name, description, measure):
     view_manager.register_view(ping_view)
 
 
+# after this, everything sent to this view will end up in azure as a metric
+def _register_azure_exporter_with_view_manager(view_manager, azure_connection_string):
+    # enable the Azure metrics exporter which talks to Azure
+    # standard metrics are CPU, memory, storage, etc.
+    exporter = metrics_exporter.new_metrics_exporter(
+        enable_standard_metrics=False, connection_string=azure_connection_string
+    )
+    view_manager.register_exporter(exporter)
+
+
+# Record a single metric. Apply same tags to all metrics.
+def _tag_and_record(mmap, metrics_info):
+    # apply same tags to every metric in batch
+    tag_value_isp = tag_value.TagValue(metrics_info["client"]["isp"])
+    tag_value_server_host = tag_value.TagValue(metrics_info["server"]["host"])
+    tagmap = tag_map.TagMap()
+    tagmap.insert(tag_key_isp, tag_value_isp)
+    tagmap.insert(tag_key_server_host, tag_value_server_host)
+    logger.debug("tagmap: %s", tagmap.map)
+    mmap.record(tagmap)
+
+
 # return: measurement map - primarily for testing
 def push_azure_speedtest_metrics(json_data, azure_connection_string):
     # standard opencensus and azure exporter setup
@@ -113,32 +124,32 @@ def push_azure_speedtest_metrics(json_data, azure_connection_string):
     mmap = stats_recorder.new_measurement_map()
 
     # perf data gathered while running tests
-    get_servers_measure = create_metric_measure(
+    get_servers_measure = _create_metric_measure(
         "get_servers_time", "Amount of time it took to get_servers()", "ms"
     )
-    get_best_servers_measure = create_metric_measure(
+    get_best_servers_measure = _create_metric_measure(
         "get_best_servers_time", "Amount of time it took to get_best_servers()", "ms"
     )
     # we measure 3 different things so lets describe them
-    ping_measure = create_metric_measure(
+    ping_measure = _create_metric_measure(
         "ping_time", "The latency in milliseconds per ping check", "ms"
     )
-    upload_measure = create_metric_measure(
+    upload_measure = _create_metric_measure(
         "upload_speed", "Upload speed in megabits per second", "Mbps"
     )
-    download_measure = create_metric_measure(
+    download_measure = _create_metric_measure(
         "download_speed", "Download speed in megabits per second", "Mbps"
     )
 
     # we always monitor ping and optionally capture upload or download
     # add setup metrics
-    create_metric_view(
+    _create_metric_view(
         view_manager=view_manager,
         name="ST Servers Time",
         description="get servers",
         measure=get_servers_measure,
     )
-    create_metric_view(
+    _create_metric_view(
         view_manager=view_manager,
         name="ST Best Servers Time",
         description="get best servers",
@@ -146,21 +157,21 @@ def push_azure_speedtest_metrics(json_data, azure_connection_string):
     )
     # the name is what you see in the Azure App Insights drop lists
     # https://github.com/census-instrumentation/opencensus-python/issues/1015
-    create_metric_view(
+    _create_metric_view(
         view_manager=view_manager,
         name="ST Ping Time",
         description="last ping",
         measure=ping_measure,
     )
     if json_data["upload"] != 0:
-        create_metric_view(
+        _create_metric_view(
             view_manager=view_manager,
             name="ST Upload Rate",
             description="last upload",
             measure=upload_measure,
         )
     if json_data["download"] != 0:
-        create_metric_view(
+        _create_metric_view(
             view_manager=view_manager,
             name="ST Download Rate",
             description="last download",
@@ -168,39 +179,27 @@ def push_azure_speedtest_metrics(json_data, azure_connection_string):
         )
 
     # lets add the exporter and register our azure key with the exporter
-    register_azure_exporter_with_view_manager(view_manager, azure_connection_string)
+    _register_azure_exporter_with_view_manager(view_manager, azure_connection_string)
 
     # views(measure, view)  events(measure,metric)
     # setup times
-    record_metric_float(mmap, json_data["get_servers"], get_servers_measure)
-    record_metric_float(mmap, json_data["get_best_servers"], get_best_servers_measure)
+    _record_metric_float(mmap, json_data["get_servers"], get_servers_measure)
+    _record_metric_float(mmap, json_data["get_best_servers"], get_best_servers_measure)
     # We always capture ping and sometimes upload or download
-    record_metric_float(mmap, json_data["ping"], ping_measure)
+    _record_metric_float(mmap, json_data["ping"], ping_measure)
     if json_data["upload"] != 0:
-        record_metric_float(mmap, json_data["upload"], upload_measure)
+        _record_metric_float(mmap, json_data["upload"], upload_measure)
     else:
         logger.info("no upload stats to report")
     if json_data["download"] != 0:
-        record_metric_float(mmap, json_data["download"], download_measure)
+        _record_metric_float(mmap, json_data["download"], download_measure)
     else:
         logger.info("no download stats to report")
 
     # create our tags for these metrics - record the metrics - the exporter runs on a schedule
     # this will throw a 400 if the instrumentation key isn't set
-    tag_and_record(mmap, json_data)
+    _tag_and_record(mmap, json_data)
     return mmap
-
-
-# Record a single metric. Apply same tags to all metrics.
-def tag_and_record(mmap, metrics_info):
-    # apply same tags to every metric in batch
-    tag_value_isp = tag_value.TagValue(metrics_info["client"]["isp"])
-    tag_value_server_host = tag_value.TagValue(metrics_info["server"]["host"])
-    tagmap = tag_map.TagMap()
-    tagmap.insert(tag_key_isp, tag_value_isp)
-    tagmap.insert(tag_key_server_host, tag_value_server_host)
-    logger.debug("tagmap: %s", tagmap.map)
-    mmap.record(tagmap)
 
 
 def push_azure_dns_metrics(
@@ -213,34 +212,34 @@ def push_azure_dns_metrics(
     mmap = stats_recorder.new_measurement_map()
 
     # perf data gathered while running tests
-    ping_min_measure = create_metric_measure("dns_min", "Minimum DNS time", "ms")
-    ping_avg_measure = create_metric_measure("dns_avg", "Average DNS time", "ms")
-    ping_max_measure = create_metric_measure("dns_max", "Maximum DNS time", "ms")
-    ping_stddev_measure = create_metric_measure(
+    ping_min_measure = _create_metric_measure("dns_min", "Minimum DNS time", "ms")
+    ping_avg_measure = _create_metric_measure("dns_avg", "Average DNS time", "ms")
+    ping_max_measure = _create_metric_measure("dns_max", "Maximum DNS time", "ms")
+    ping_stddev_measure = _create_metric_measure(
         "dns_stddev", "Standard Deviation DNS time", "ms"
     )
 
     # we always monitor ping and optionally capture upload or download
     # add setup metrics
-    create_metric_view(
+    _create_metric_view(
         view_manager=view_manager,
         name="ST DNS Min",
         description="DNS ping min time",
         measure=ping_min_measure,
     )
-    create_metric_view(
+    _create_metric_view(
         view_manager=view_manager,
         name="ST DNS Avg",
         description="DNS ping average time",
         measure=ping_avg_measure,
     )
-    create_metric_view(
+    _create_metric_view(
         view_manager=view_manager,
         name="ST DNS Max",
         description="DNS ping max time",
         measure=ping_max_measure,
     )
-    create_metric_view(
+    _create_metric_view(
         view_manager=view_manager,
         name="ST DNS StdDev",
         description="DNS ping standard deviation",
@@ -248,13 +247,13 @@ def push_azure_dns_metrics(
     )
 
     # lets add the exporter and register our azure key with the exporter
-    register_azure_exporter_with_view_manager(view_manager, azure_connection_string)
+    _register_azure_exporter_with_view_manager(view_manager, azure_connection_string)
 
     # views(measure, view)  events(measure,metric)
-    record_metric_float(mmap, ping_min, ping_min_measure)
-    record_metric_float(mmap, ping_average, ping_avg_measure)
-    record_metric_float(mmap, ping_max, ping_max_measure)
-    record_metric_float(mmap, ping_stddev, ping_stddev_measure)
+    _record_metric_float(mmap, ping_min, ping_min_measure)
+    _record_metric_float(mmap, ping_average, ping_avg_measure)
+    _record_metric_float(mmap, ping_max, ping_max_measure)
+    _record_metric_float(mmap, ping_stddev, ping_stddev_measure)
 
     # could add tags here
     # this will throw a 400 if the instrumentation key isn't set
