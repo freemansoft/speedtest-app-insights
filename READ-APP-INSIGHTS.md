@@ -1,19 +1,22 @@
-# Azure Appication Insights 
-Python information can be sent to Azure Application Insights as Metrics, Traces or Logs.  
-The data is actualy sent as events which means that it could appear in _Metrics_ as an _Aggregation_ and in _Logs_ as an individual event.
+# Tracking Performance
+You can send data from any number of locations to the same Application Insights Instance and then metrics dashboards that compare locations and providers
 
-This program leverages the three types of telemetry supported for Python Applications.
+![Multi-Site](./images/speed-test-dual-site.png)
+
+# Azure Appication Insights 
+Python observability information can be sent to Azure Application Insights as `Metrics`, `Traces` or, `Logs`.  
+Each data point is actualy sent as an event/log-message which means that it can be displayed in _Metrics_ as an _Aggregation_ and in _Logs_ as an individual event.
+
+This program demonstrates the three different types of telemetry supported for Python Applications.
 
 | Telemetry sent with | Open Census Terms| Appears in Application Insights as |
 | - | - | - | 
-| Azure Monitor _trace exporter_  | trace and span | `dependencies` |
-| Azure Monitor _metrics exporter_ | metrics | `customMetrics` |
-| Azure Monitor _log exporter_ | Python logger | `traces` |
+| Azure Monitor _trace exporter_   | trace and span | `dependencies` |
+| Azure Monitor _metrics exporter_ | metrics        | `customMetrics` |
+| Azure Monitor _log exporter_     | Python logger  | `traces` |
 
-## Use Case
-You can use the dash board to track your performance or compare the performance of different locations or providers
-
-![Multi-Site](./images/speed-test-dual-site.png)
+# Metrics Dimensions
+The OpenCensus Exporters send various standard or custom dimensions as part of each event.
 
 ## Standard Dimensions sent to Application Insights via all exporters
 _as of 3/2021_
@@ -37,15 +40,29 @@ The [azure exporter utils.py](https://github.com/census-instrumentation/opencens
 | Source of synthetic traffic | `undefined` | n/a |
 | State or Province | State | ? |
 
-## Telemetry via metrics exporter 
+## Custom Dimensions sent to Application Insights by _Metrics_ exporter
+AppInsights.py adds a couple custom tags to the data. These show up as custom dimensions.  
 
-### Structure in the OpenCensus API and Application Insights metrics exporter
+* CustomDimensions can be seen on the query screen results pane as a combined json structure. 
+* CustomDimensions must added explicitly to the results configuration
+* CustomDimensions can be used to filter in gauges.
+
+The speedtest program adds two `customDimension` properties.  You can see the `customDimension` subtree inside each custom metric
+
+| Custom Dimension | Value |
+| - | - |
+| client_isp | client isp as reported by speedtest sdk |
+| server_host | speedtest server host as reported by speedtest sdk | 
+
+
+# Structure in the OpenCensus API and Application Insights metrics exporter
 This is _partially correct_ explanation of OpenCensus events and Azure bindings
+
 1. The `measure` is a type definition that is used as a key to register both `metrics` and `views`
     1. The view list has `views` keyed by `measure`
     1. The events have `recordings` keyed by `measure`
 
-### Creating Graph Panes from Metrics
+# Creating Graph Panes from Metrics
 Metrics aggregations are visible as `metrics` in the Applicaton Insights under _Monitoring / Metrics _
 1. `Home > Application Insights > _your resource_ ` 
 1. Left side-bar `Monitoring / Metrics`
@@ -58,56 +75,55 @@ Metrics aggregations are visible as `metrics` in the Applicaton Insights under _
     ```
 1. If you have more than one device and want to see them slit out on the graph pane then add a split by `Cloud role instance`
 
-### Dashboards
+## Populating Dashboards with Graph Panes
 Graph panes can be added to dashboards.  Dashboards are sort of global and work across App Insights instances across subscriptions.
-1. Add the graph pane created above to a `Dashboard`.  You can add to an existing `Dashboard` or create a new one
+1. Add the graph pane created above to a `Dashboard`.  You can add add a graph pane to an existing `Dashboard` or create a new one
 
-You can see that Dashboards have a different scope when you look at their URL which is different from the rest of the Azure Portal.
-> https://portal.azure.com/#@<Azure AD Domain-Tenant>/dashboard/private
+Dashboards have a different scope than App Insights or other resoruces.  You can see this when you look at their URL which is different from the rest of the Azure Portal.
+> `https://portal.azure.com/#@<Azure AD Domain-Tenant>/dashboard/private`
 
-### Seing Metrics in Logs
+# _Metrics_ in Application Insight
 Individual _Metrics Events_ can also be seen under _Monitoring / Logs_
 1. `Home > Application Insights > _your resource_ ` 
 1. Left side-bar `Monitoring / Logs`
-1. _Need to expand this section_
+1. Run a query for `customMetrics`
 
-#### Metrics currently created in this package
+Metrics currently created in this package:
 | Metric Namespace | SpeedTest Metric | Description |
 | - | - | - |
-| `Log Based Metrics` | `ST Ping Time` | ping time as reported by SpeedTest |
-| `Log Based Metrics` | `ST Download Speed` | download speed as reported by SpeedTest |
-| `Log Based Metrics` | `ST Upload Speed` | upload speed time as reported by SpeedTest |
-| `Log Based Metrics` | `ST Servers Time` | initial SpeedTest setup call time |
+| `Log Based Metrics` | `ST Ping Time`         | ping time as reported by SpeedTest |
+| `Log Based Metrics` | `ST Download Speed`    | download speed as reported by SpeedTest |
+| `Log Based Metrics` | `ST Upload Speed`      | upload speed time as reported by SpeedTest |
+| `Log Based Metrics` | `ST Servers Time`      | initial SpeedTest setup call time |
 | `Log Based metrics` | `ST Best Servers Time` | time it took to get 'best servers' from SpeedTest |
+| `Log Based metrics` | `ST DNS Min`           | DNS Ping Time  metric |
+| `Log Based metrics` | `ST DNS StdDev`        | DNS Ping Time metric |
+| `Log Based metrics` | `ST DNS Avg`           | DNS Ping Time metric |
+| `Log Based metrics` | `ST DNS Max`           | DNS PIng Time metric |
 
 
-### Custom Dimensions
-AppInsights.py adds a couple custom tags to the data. These show up as custom dimensions.  
-
-* CustomDimensions can be seen on the query screen results pane as a combined json structure. 
-* CustomDimensions must added explicitly to the results configuration
-* CustomDimensions can be used to filter in gauges.
-
-The speedtest program adds two `customDimension` properties
-
-| Custom Dimension | Value |
-| - | - |
-| client_isp | client isp as reported by speedtest sdk |
-| server_host | speedtest server host as reported by speedtest sdk | 
-
-## Log output in Application Insight
+# _Log_ logging in Application Insight
 The program can send a single line of output per run to the ApplicationInsights as `traces` in the Log export query screens
+Individual _log statements_ can be seen under _Monitoring / Logs_
+1. `Home > Application Insights > _your resource_ ` 
+1. Left side-bar `Monitoring / Logs`
+1. Run a query for `traces`
 
-## Tracing and spans
+# _Tracing and Spans_ in Application Insight
 The program sends trace exports via the OpenCensus `Trace and Span` APIs.
 
-* You can find the custom nested span tracing in `dependencies` in the _Monitoring / Logs_
-* You can use the _Performance_ dashboard to see span timing information. 
-    * Drill down into an individual call chain by clicking on _Samples_ in the bottom right corner
+Individual _traces_ can also be seen under _Monitoring / Logs_
+1. `Home > Application Insights > _your resource_ ` 
+1. Left side-bar `Monitoring / Logs`
+1. Run a query for `dependencies`
 
-**Sample Call Chain Queries**
-Some derived from
-*  https://social.msdn.microsoft.com/Forums/azure/en-US/7333f142-fe43-4efd-a6e4-e61f9078c145/azure-app-insights-join?forum=ApplicationInsights
+You can use the _Performance_ dashboard to see span timing information. 
+  * Drill down into an individual call chain by clicking on _Samples_ in the bottom right corner
+
+_________________________________________________
+
+# Sample Queries against the Logs
+Some samples derived from https://social.msdn.microsoft.com/Forums/azure/en-US/7333f142-fe43-4efd-a6e4-e61f9078c145/azure-app-insights-join?forum=ApplicationInsights
 
 All of the traces for some time window
 ```
