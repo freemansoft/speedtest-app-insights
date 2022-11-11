@@ -32,7 +32,8 @@ This project captures internet connection statistics and sends them to an Azure 
 | setup.ps1 | Windows Python setup program. Will prompt to install python3 via Windows store |
 
 # Usage - NetCheck and Azure App Insights
-1. Run `1-setup-host.sh` to install dependencies
+1. Run `1-setup-host.sh` to install dependencies on a raspberry pi
+    1. Alternative for like a windows machine `pip3 install -r requirements.txt`
 1. Create Application Inights and get key
     1. Get an Azure account 
     1. Log into https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents 
@@ -42,10 +43,13 @@ This project captures internet connection statistics and sends them to an Azure 
         1. Select an instance name. 
         1. Select a Region.
         1. Select _Resource Mode_ as a _Workspace-based. 
-        1. Seelct the Log Analytics Workspace. There is a DefaultWorkspace in each region. You can use that.
+        1. Select the Log Analytics Workspace. There is a DefaultWorkspace in each region. You can use that.
     1. Get an Application Insights _Instrumentation Key_ from the Portal.  It is on the Application Insights home page in the upper right corner.
+        1. Open the Application Insights blade https://portal.azure.com/#view/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents
+        1. Select your previously created instance
+        1. Copy the `Connection String` in the upper right corder
     1. Copy config.ini.template to config.ini
-    1. Replace the dummy key in config.ini with your new key.  It should look something like
+    1. Replace the dummy key in config.ini with your new key that you copied from the portal above.  It should look something like
     ```
     azure_instrumentation_key=InstrumentationKey=0000000-0000-0000-0000-00000000000;IngestionEndpoint=https://westus2-1.in.applicationinsights.azure.com/
     ```

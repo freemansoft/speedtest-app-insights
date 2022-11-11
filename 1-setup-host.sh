@@ -2,6 +2,8 @@
 # Install the speedtest cli from https://www.speedtest.net/apps/cli
 # See README.md
 
+#pip3 install --upgrade azure-cli
+
 # This section is needed if you wish to register results
 # Other non-official binaries will conflict with Speedtest CLI
 # Run the CLI the first time to accept license conditions
@@ -24,11 +26,15 @@ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 3
 sudo apt install python3-pip
 
 # TODO put this in requirements.txt!
-echo "Installing speedtest python sdk - probably CLI apps in ~/.local/bin"
+#echo "Installing speedtest python sdk - probably CLI apps in ~/.local/bin"
 # https://linuxconfig.org/how-to-run-a-speed-test-from-command-line-using-speedtest-cli#h6-using-the-csv-or-json-formats-for-the-results
-pip3 install speedtest-cli
+#pip3 install speedtest-cli
 # CLI api changed requiring an update. Uncomment if v2.1.3 or later not available.  Assumes pip3 not run as sudo
 # wget https://raw.githubusercontent.com/sivel/speedtest-cli/v2.1.3/speedtest.py -O ~/.local/lib/python<version>/site-packages/speedtest.py 
+#echo "Installing Azure Application Insights tooling"
+#python3 -m pip install opencensus-ext-azure
+echo "Installing dependencies in requirements.txt"
+pip3 install -r requirements.txt
 
 # echo "Installing dnspython for future work"
 # pip3 install dnspython
@@ -44,8 +50,5 @@ pip3 install -r requirements.txt .
 cd ..
 rm -rf dnsdiag
 # could test with dnseval --json - www.apple.com
-
-echo "Installing Azure Application Insights tooling"
-python3 -m pip install opencensus-ext-azure
 
 echo "Done"
