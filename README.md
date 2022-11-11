@@ -15,7 +15,15 @@ This project captures internet connection statistics and sends them to an Azure 
     1. You can comment out the `AppInsights.py` call at the bottom of `NetCheck.py` if you don't wish to create a dashboard in _Azure Application Insights_
 
 # TODO 
-1. Create script that instantiates Application Insights so you don't have to use https://portal.azure.com
+1. Create IaC script that instantiates Application Insights so you don't have to use https://portal.azure.com
+1. Create a script for the Mac that runs `Install Certificates.command`
+
+# Issues
+1. speedtest.net initialization can vary by platorm. Some machines require https and some don't work with it
+  1. Some Windows WSL environments require `s = speedtest.Speedtest(secure=1)`
+  1. The Mac with python 3.10 gets a cert error.  `CERTIFICATE_VERIFYFAILED`
+    * Fix the certificate by running the `Install Certificates.command`  Double click on `/Applications/<python version>/Install Certificates.command`
+    * Disable `secure` with this code change `s = speedtest.Speedtest(secure=0)`
 
 # Scripts in this repository
 | Script | Purpose |
@@ -33,7 +41,7 @@ This project captures internet connection statistics and sends them to an Azure 
 
 # Usage - NetCheck and Azure App Insights
 1. Run `1-setup-host.sh` to install dependencies on a raspberry pi
-    1. Alternative for like a windows machine `pip3 install -r requirements.txt`
+    1. Alternative for like a windows machine `pip3 install -r requirements.txt` or `python3 -m pip install -r requirements.txt`
 1. Create Application Inights and get key
     1. Get an Azure account 
     1. Log into https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents 
