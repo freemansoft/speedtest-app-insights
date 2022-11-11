@@ -9,11 +9,11 @@ Each data point is actualy sent as an event/log-message which means that it can 
 
 This program demonstrates the three different types of telemetry supported for Python Applications.
 
-| Telemetry sent with | Open Census Terms| Application Insights Table | Event information |
+| Azure Monitor telemetry | Application Insights Table| Open Census Terms | Event information |
 | - | - | - | - |
-| Azure Monitor _trace exporter_   | trace and span | `dependencies` | Span duration of some code block in msec |
-| Azure Monitor _metrics exporter_ | metrics        | `customMetrics` | Values something returned by SpeedTest library convert to metric |
-| Azure Monitor _log exporter_     | Python logger  | `traces` | logger output when --verbose is set |
+| _trace exporter_   | `dependencies`  | trace and span  | Nested tracing spans  in msec |
+| _metrics exporter_ | `customMetrics` | metrics         | Counters or Values. values returned by SpeedTest API |
+| _log exporter_     | `traces`        | Python logger   | logging output when --verbose is set |
 
 # Metrics Dimensions
 The OpenCensus Exporters send various standard or custom dimensions as part of each event.
