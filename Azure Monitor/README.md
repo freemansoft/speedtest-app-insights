@@ -19,6 +19,7 @@ This will pull back some custom metrics using the configs created in above. Ther
 # References
 
 ## Applicaton Insights REST API
+* https://learn.microsoft.com/en-us/azure/azure-monitor/logs/api/overview
 * https://learn.microsoft.com/en-us/rest/api/application-insights/query/get?tabs=HTTP
 
 ## Kusto Query language
