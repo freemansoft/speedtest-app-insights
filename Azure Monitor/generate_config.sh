@@ -4,7 +4,6 @@ if [ ! -f instance_config.ini ]; then
     echo "copy instance_config.ini.template to instance_config.ini and set values and then re-run"
     exit -1
 fi
-
 source ./instance_config.ini
 
 # install jq  we need it
