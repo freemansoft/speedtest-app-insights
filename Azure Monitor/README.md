@@ -11,10 +11,12 @@ These steps will create an API key in your applicaton instance and generate a co
     1. This can only be run once because the key by that name will already exist for the 2nd run
 
 # Demo
-This will pull back some custom metrics using the configs created in above. There are a couple queries in the shell script.
+Retreive custom metrics using the configs created in above. There are a couple queries in the shell script.
 
 1. Run `query_custom_metrics` to retrieve the last 10 customMetrics
-    1. This depends on values you manually inserted in `instance_config.ini` and values that were script generated into `app_config.ini`
+    1. This depends on 
+        1. Values you **manually** inserted in `instance_config.ini` 
+        1. App Instance specific values that were script generated into `app_config.ini`
 
 # References
 

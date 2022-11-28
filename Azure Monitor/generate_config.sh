@@ -48,5 +48,5 @@ else
     echo "appId=$appId" >> api_config.ini
 fi
 
-#Neither of these returns the actual key
-#az monitor app-insights component show --app FSI-Speedtest-Resource --resource-group FSI-Speedtest_Group
+# Looks like this command does not return the actual API key - probably for security reasons
+az monitor app-insights component show --app $insightsInstanceName --resource-group $insightsResourceGroup

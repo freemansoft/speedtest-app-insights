@@ -1,5 +1,8 @@
 # config needed to bootstrape verything else 
-# app can be found on the "API Access" pane in the App Insights Azure Portal blade
+# set values to match your Azure Application Insights Instance
+# app can be found on the App Insights Azure Portal blade "API Access" pane 
+
+# arbritrary name of the generated api key.
 apiKeyName="demo"
 # resource group your Applicaton Insights instance was created in
 insightsResourceGroup="FSI-Speedtest_Group"

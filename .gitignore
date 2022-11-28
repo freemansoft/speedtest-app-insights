@@ -7,4 +7,4 @@ whois.cache
 results.json
 foo.json
 dnsdiag/
-
+.DS_Store
