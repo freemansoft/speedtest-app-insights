@@ -21,8 +21,23 @@ Retreive custom metrics using the configs created in above. There are a couple q
 # Sample Data
 
 ## A Query
+This query requires credentials.  I added a `X-Api-Key` header with an access token to my requests. It coul have also been added as a query parameter. 
+
 `https://api.applicationinsights.io/v1/apps/<app-id>/query?query=customMetrics+%7C+where+name+%3D%3D+"ST+Ping+Time"+%7C+where+timestamp+>+ago(4h)+%7C+summarize+min(value)%2C+avg(value)%2C+max(value)+by+cloud_RoleInstance
 Query: customMetrics+%7C+where+name+%3D%3D+"ST+Ping+Time"+%7C+where+timestamp+>+ago(4h)+%7C+summarize+min(value)%2C+avg(value)%2C+max(value)+by+cloud_RoleInstance`
+
+The URL is constructed in pieces
+
+```mermaid
+graph
+    subgraph URI[Full Request URI]
+        AI-URL[App Insights Base URL]
+        AI-ID[App Insights Instance ID]
+        QueryParameters[query?query=]
+        Query[Escaped KQL query as query parameter]
+        Credentials[Token as query parameter or header]
+    end
+```
 
 ## Query Results
 Our query only has a single table.  The table contains column metadata and rows of data.
