@@ -18,6 +18,62 @@ Retreive custom metrics using the configs created in above. There are a couple q
         1. Values you **manually** inserted in `instance_config.ini` 
         1. App Instance specific values that were script generated into `app_config.ini`
 
+# Sample Data
+
+## A Query
+`https://api.applicationinsights.io/v1/apps/<app-id>/query?query=customMetrics+%7C+where+name+%3D%3D+"ST+Ping+Time"+%7C+where+timestamp+>+ago(4h)+%7C+summarize+min(value)%2C+avg(value)%2C+max(value)+by+cloud_RoleInstance
+Query: customMetrics+%7C+where+name+%3D%3D+"ST+Ping+Time"+%7C+where+timestamp+>+ago(4h)+%7C+summarize+min(value)%2C+avg(value)%2C+max(value)+by+cloud_RoleInstance`
+
+## Query Results
+Our query only has a single table.  The table contains column metadata and rows of data.
+```json
+{"tables": 
+    [
+    {
+        "columns": [
+            {"name": "cloud_RoleInstance", "type": "string"}, 
+            {"name": "min_value", "type": "real"}, 
+            {"name": "avg_value", "type": "real"}, 
+            {"name": "max_value", "type": "real"}
+        ], 
+        "rows": [
+            ["pi-18d8aec7", 54.139, 519.889, 1386.002], 
+            ["pi-153a3987b", 4.95, 6.448292, 8.023]
+            ], 
+        "name": "PrimaryResult"
+    }
+    ]
+}
+```
+
+## Column Section of a Table
+The column metadata section describes the columns.
+```json
+[
+    {"name": "cloud_RoleInstance", "type": "string"}, 
+    {"name": "min_value", "type": "real"}, 
+    {"name": "avg_value", "type": "real"}, 
+    {"name": "max_value", "type": "real"}
+]
+```
+
+## Row Data Section of a Table
+The row section contains the actual query results.
+```json
+[
+    ["pi-18d8aec7", 54.139, 519.889, 1386.002], 
+    ["pi-153a3987b", 4.95, 6.448292, 8.023]
+]
+```
+
+Our query returned the data for two devices, on different networks in this case
+```json
+["pi-18d8aec7", 54.139, 519.889, 1386.002]
+```
+```json
+["pi-153a3987b", 4.95, 6.448292, 8.023]
+```
+
 # References
 
 ## Applicaton Insights REST API
