@@ -26,16 +26,29 @@ This query requires credentials.  I added a `X-Api-Key` header with an access to
 `https://api.applicationinsights.io/v1/apps/<app-id>/query?query=customMetrics+%7C+where+name+%3D%3D+"ST+Ping+Time"+%7C+where+timestamp+>+ago(4h)+%7C+summarize+min(value)%2C+avg(value)%2C+max(value)+by+cloud_RoleInstance
 Query: customMetrics+%7C+where+name+%3D%3D+"ST+Ping+Time"+%7C+where+timestamp+>+ago(4h)+%7C+summarize+min(value)%2C+avg(value)%2C+max(value)+by+cloud_RoleInstance`
 
-The URL is constructed in pieces
+The URL is constructed either of two ways, when using an `api key`.  `OAuth` is the preferred method for credentials.
 
 ```mermaid
 graph
-    subgraph URI[Full Request URI]
+    subgraph URI[Request URI]
         AI-URL[App Insights Base URL]
         AI-ID[App Insights Instance ID]
-        QueryParameters[query?query=]
-        Query[Escaped KQL query as query parameter]
-        Credentials[Token as query parameter or header]
+        QueryParameters[query?]
+        Query[query=Escaped KQL query as query parameter]
+        Credentials[api_key=Token as query parameter]
+    end
+```
+or 
+```mermaid
+graph
+    subgraph URI[Request URI]
+        AI-URL[App Insights Base URL]
+        AI-ID[App Insights Instance ID]
+        QueryParameters[query?]
+        Query[query=Escaped KQL query as query parameter]
+    end
+    subgraph Headers
+        Credentials[X-Api-Key: Token as header]
     end
 ```
 
