@@ -1,0 +1,26 @@
+https://api.applicationinsights.io/v1/apps/SCRUBBED-INSTANCE-ID/query?
+ query=customMetrics+%7C+where+name+%3D%3D+"ST+Ping+Time"+%7C+where+timestamp+>+ago(4h)+%7C+summarize+min(value)%2C+avg(value)%2C+max(value)+by+cloud_RoleInstance
+Query: customMetrics+%7C+where+name+%3D%3D+"ST+Ping+Time"+%7C+where+timestamp+>+ago(4h)+%7C+summarize+min(value)%2C+avg(value)%2C+max(value)+by+cloud_RoleInstance
+RTC time: 2022-11-30 20:25:00 Wed
+Response: {'tables': [
+    {
+    'columns': [
+        {'name': 'cloud_RoleInstance', 'type': 'string'}, 
+        {'name': 'min_value', 'type': 'real'}, 
+        {'name': 'avg_value', 'type': 'real'}, 
+        {'name': 'max_value', 'type': 'real'}], 
+    'rows': [
+        ['pi-18d8aec7', 62.668, 453.9218, 1852.822], 
+        ['pi-153a3987b', 5.831, 13.82269, 22.972]], 
+    'name': 'PrimaryResult'
+    }]}
+
+Response Cols: [
+    {'name': 'cloud_RoleInstance', 'type': 'string'}, 
+    {'name': 'min_value', 'type': 'real'}, 
+    {'name': 'avg_value', 'type': 'real'}, 
+    {'name': 'max_value', 'type': 'real'}]
+Response Rows: [['pi-18d8aec7', 62.668, 453.9218, 1852.822], ['pi-153a3987b', 5.831, 13.82269, 22.972]]
+
+Host 1 Results: ['pi-18d8aec7', 62.668, 453.9218, 1852.822]
+Host 2 Results: ['pi-153a3987b', 5.831, 13.82269, 22.972]

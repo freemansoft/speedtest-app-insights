@@ -39,8 +39,11 @@ graph
     end
 ```
 
+## Sample M5Flow/UiFlow App
+The [Sample AppInsights Python App built with UiFlow / M5Flow](Sample-AppInsightsUiFlow.m5f)runs a specific query against specified Applicaton Insights instances.
+
 ## Query Results
-Our query only has a single table.  The table contains column metadata and rows of data.
+Our query only has a single table.  The table contains column metadata and rows of data. You can find a similar result in [SampleQueryResults.json](SampleQueryResults.json)
 ```json
 {"tables": 
     [
