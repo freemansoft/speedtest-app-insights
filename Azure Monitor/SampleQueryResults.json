@@ -1,0 +1,39 @@
+{
+    "tables": [
+        {
+            "columns": [
+                {
+                    "name": "cloud_RoleInstance",
+                    "type": "string"
+                },
+                {
+                    "name": "min_value",
+                    "type": "real"
+                },
+                {
+                    "name": "avg_value",
+                    "type": "real"
+                },
+                {
+                    "name": "max_value",
+                    "type": "real"
+                }
+            ],
+            "rows": [
+                [
+                    "pi-18d8aec7",
+                    41.922,
+                    559.1242,
+                    601146.3
+                ],
+                [
+                    "pi-153a3987b",
+                    5.557,
+                    6.763047,
+                    8.683
+                ]
+            ],
+            "name": "PrimaryResult"
+        }
+    ]
+}
