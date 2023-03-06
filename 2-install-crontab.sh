@@ -1,4 +1,8 @@
 #!/bin/bash
+# SPDX-FileCopyrightText: 2022 Joe Freeman joe@freemansoft.com
+#
+# SPDX-License-Identifier: MIT
+#
 # installs NetCheck.py in cron from this working directory and runs it every 10 minutes
 # ASSUMES you have NO spaces in path to this directory
 #
@@ -8,7 +12,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 #echo $DIR
 Me=`whoami`
 
-# Can add NetCheck.py options to OPTIONS: --verbose or --download or --upload 
+# Can add NetCheck.py options to OPTIONS: --verbose or --download or --upload
 PYTHON_SCRIPT="NetCheck.py"
 
 OPTIONS_PING_IT=""

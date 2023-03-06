@@ -1,4 +1,8 @@
-# TODO Why is this file in this project?
+# SPDX-FileCopyrightText: 2022 Joe Freeman joe@freemansoft.com
+#
+# SPDX-License-Identifier: MIT
+#
+# TODO: Why is this file in this project?
 from aiy.board import Board, Led
 import time
 import sys
