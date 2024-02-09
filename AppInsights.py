@@ -8,7 +8,8 @@
 # Can also register a logger to export logs to Application Insights
 #
 #
-# This code is a useful example but is hardcoded to specific fields when called as a function library
+# This code is a useful example but is
+# hardcoded to specific fields when called as a function library
 from datetime import datetime
 import json
 import configparser
@@ -36,7 +37,8 @@ from opencensus.trace.tracer import Tracer
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# keys in the key map must also be in the view dimensions/columns to be exposed as customDimensions
+# keys in the key map must also be in the view dimensions/columns to be
+# exposed as customDimensions
 tag_key_isp = tag_key.TagKey("client_isp")
 tag_key_server_host = tag_key.TagKey("server_host")
 
@@ -53,12 +55,13 @@ def load_insights_key():
 
 
 # call this if you want to send logs to Azure App Insight
-# after this, every log(warn) will end up in azure as a log event "trace" !"tracing"
+# after this,
+# every log(warn) will end up in azure as a log event "trace" !"tracing"
 def register_azure_handler_with_logger(logger, azure_connection_string):
     logger.addHandler(AzureLogHandler(connection_string=azure_connection_string))
 
 
-## Call this to get an OpenCensus Tracer that is bound to Azure Application Insights
+# Call to get an OpenCensus Tracer that is bound to Azure Application Insights
 def register_azure_exporter_with_tracer(azure_connection_string):
     tracer = Tracer(
         exporter=AzureExporter(connection_string=azure_connection_string),
@@ -200,7 +203,9 @@ def push_azure_speedtest_metrics(json_data, azure_connection_string):
     else:
         logger.info("no download stats to report")
 
-    # create our tags for these metrics - record the metrics - the exporter runs on a schedule
+    # create our tags for these metrics -
+    # record the metrics -
+    # the exporter runs on a schedule
     # this will throw a 400 if the instrumentation key isn't set
     _tag_and_record(mmap, json_data)
     return mmap

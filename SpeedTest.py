@@ -65,7 +65,7 @@ def run_test(should_download, should_upload, should_share, tracer):
                 )
                 s.results.share()
 
-        # calculate and return the setup time which is not reported by speedtest
+        # calculate and return setup time which is not reported by speedtest
         # convert seconds based times to msec
         setup_time_dict = {
             "get_servers": (tac - tic) * 1000.0,

@@ -3,10 +3,16 @@
 #
 # SPDX-License-Identifier: MIT
 #
+import logging
 import argparse
 import json
-from AppInsights import *
-from SpeedTest import *
+from AppInsights import (
+    load_insights_key,
+    push_azure_speedtest_metrics,
+    register_azure_exporter_with_tracer,
+    register_azure_handler_with_logger,
+)
+from SpeedTest import run_test, Merge, write_json
 
 # ---------------------------
 # TODO add DNS lookup timing
@@ -24,7 +30,7 @@ logger = logging.getLogger("NetCheck")
 # --------------------------------------------------
 parser = argparse.ArgumentParser(
     prog="NetCheck",
-    description="A Python Driver for the SpeedTest.net latency and throughput testign libraries.",
+    description="A Python Driver for the SpeedTest.net latency and throughput testing libraries.",
     epilog="Start your engines!",
 )
 parser.add_argument(
@@ -81,7 +87,8 @@ push_azure_speedtest_metrics(results_combined, azure_instrumentation_key)
 # We route the verbose log output to the ApplicationInsights logs.
 # ---------------------------------------------------
 if args.verbose:
-    # This program exits after one execution so only these log statements end up in Application insights.
+    # Program exits after one execution
+    # so only these log statements end up in Application insights.
     register_azure_handler_with_logger(logger, azure_instrumentation_key)
     logger.info('{ "combined_data": %s }', json.dumps(results_combined, sort_keys=True))
     logger.debug(

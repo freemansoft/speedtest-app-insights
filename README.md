@@ -27,7 +27,7 @@ This project captures internet connection statistics and sends them to an Azure 
 
 1. speedtest.net initialization can vary by platorm. Some machines require https and some don't work with it
     1. Some Windows WSL environments require `s = speedtest.Speedtest(secure=1)`
-    1. The Mac with python 3.10 gets a cert error.  `CERTIFICATE_VERIFYFAILED`
+    1. The Mac with python 3.10 gets a cert error.  `CERTIFICATE_VERIFYFAILED`  Two options
         * Fix the certificate by running the `Install Certificates.command`  Double click on `/Applications/<python version>/Install Certificates.command`
         * Disable `secure` with this code change `s = speedtest.Speedtest(secure=0)`
 
