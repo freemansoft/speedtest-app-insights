@@ -5,8 +5,8 @@
 #
 
 import ipaddress
-import socket
 import logging
+import socket
 
 # these come from dnsdiag - we're making use of their internal modules
 import util.dns

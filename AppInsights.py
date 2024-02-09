@@ -10,9 +10,18 @@
 #
 # This code is a useful example but is
 # hardcoded to specific fields when called as a function library
-from datetime import datetime
-import json
 import configparser
+import json
+
+# OpenCensus Log capture and Application Insights via logger
+import logging
+from datetime import datetime
+
+from opencensus.ext.azure import metrics_exporter
+from opencensus.ext.azure.log_exporter import AzureLogHandler
+
+# OpenCensus TraceCapture and Application Insights via Tracer
+from opencensus.ext.azure.trace_exporter import AzureExporter
 
 # OpenCensus Metrics and Azure Application Insights
 from opencensus.stats import aggregation as aggregation_module
@@ -22,14 +31,6 @@ from opencensus.stats import view as view_module
 from opencensus.tags import tag_key as tag_key
 from opencensus.tags import tag_map as tag_map
 from opencensus.tags import tag_value as tag_value
-from opencensus.ext.azure import metrics_exporter
-
-# OpenCensus Log capture and Application Insights via logger
-import logging
-from opencensus.ext.azure.log_exporter import AzureLogHandler
-
-# OpenCensus TraceCapture and Application Insights via Tracer
-from opencensus.ext.azure.trace_exporter import AzureExporter
 from opencensus.trace.samplers import AlwaysOnSampler
 from opencensus.trace.tracer import Tracer
 
