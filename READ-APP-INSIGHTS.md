@@ -15,11 +15,11 @@ Each data point is actualy sent as an event/log-message which means that it can 
 
 This program demonstrates the three different types of telemetry supported for Python Applications.
 
-| Azure Monitor telemetry | Application Insights Table| Open Census Terms | Event information |
-| - | - | - | - |
-| _trace exporter_   | `dependencies`  | trace and span  | Nested tracing spans  in msec |
-| _metrics exporter_ | `customMetrics` | metrics         | Counters or Values. values returned by SpeedTest API |
-| _log exporter_     | `traces`        | Python logger   | logging output when --verbose is set |
+| Azure Monitor telemetry | Application Insights Table | Open Census Terms | Event information                                    |
+| ----------------------- | -------------------------- | ----------------- | ---------------------------------------------------- |
+| _trace exporter_        | `dependencies`             | trace and span    | Nested tracing spans  in msec                        |
+| _metrics exporter_      | `customMetrics`            | metrics           | Counters or Values. values returned by SpeedTest API |
+| _log exporter_          | `traces`                   | Python logger     | logging output when --verbose is set                 |
 
 ## Metrics Dimensions
 
@@ -30,22 +30,22 @@ The OpenCensus Exporters send various standard or custom dimensions as part of e
 _as of 3/2021_
 The [azure exporter utils.py](https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py) sends a fixed set of properties to Application Insights that can be used in charts for **filtering** or **splitting**
 
-| Property Name | Populated With | Probably Source |
-| - | - | - |
-| Application Version | `undefined` | n/a |
-| Authenticated User | `False` | n/a |
-| Browser Version | `Python Requests n.n` | ? |
-| City | location | ? |
-| Cloud Role Instance | **hostname** | platform.node() |
-| Cloud Role Name | Python script name | sys.argv[0] |
-| Country or Region | country | ? |
-| Device Model | `other` | hard coded device.type |
-| Device Type | `PC` | ? |
-| Operating System | `#1333 SMP ...` | platform.version() part of `uname -a` |
-| Operation Name | `undefined` | n/a |
-| Real or synthetic traffic | `False` | ? |
-| Source of synthetic traffic | `undefined` | n/a |
-| State or Province | State | ? |
+| Property Name               | Populated With        | Probably Source                       |
+| --------------------------- | --------------------- | ------------------------------------- |
+| Application Version         | `undefined`           | n/a                                   |
+| Authenticated User          | `False`               | n/a                                   |
+| Browser Version             | `Python Requests n.n` | ?                                     |
+| City                        | location              | ?                                     |
+| Cloud Role Instance         | **hostname**          | platform.node()                       |
+| Cloud Role Name             | Python script name    | sys.argv[0]                           |
+| Country or Region           | country               | ?                                     |
+| Device Model                | `other`               | hard coded device.type                |
+| Device Type                 | `PC`                  | ?                                     |
+| Operating System            | `#1333 SMP ...`       | platform.version() part of `uname -a` |
+| Operation Name              | `undefined`           | n/a                                   |
+| Real or synthetic traffic   | `False`               | ?                                     |
+| Source of synthetic traffic | `undefined`           | n/a                                   |
+| State or Province           | State                 | ?                                     |
 
 1. Splitting is not supported on charts with multiple metrics. [See documentation](https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-charts)
 1. You can break out each metric by host by **splitting** using the `Cloud Role Instance` dimension
@@ -54,10 +54,10 @@ The [azure exporter utils.py](https://github.com/census-instrumentation/opencens
 
 AppInsights.py adds two `customDimension` properties.  You can see the `customDimension` subtree inside each custom metric
 
-| Custom Dimension | Value |
-| - | - |
-| client_isp | client isp as reported by speedtest sdk |
-| server_host | speedtest server host as reported by speedtest sdk |
+| Custom Dimension | Value                                              |
+| ---------------- | -------------------------------------------------- |
+| client_isp       | client isp as reported by speedtest sdk            |
+| server_host      | speedtest server host as reported by speedtest sdk |
 
 Notes:
 
@@ -112,17 +112,17 @@ Individual _Metrics Events_ can also be seen under _Monitoring / Logs_
 [App Insights CustomMetrics Blog Article](https://joe.blog.freemansoft.com/2021/03/querying-python-metrics-custom-tags-as.html)
 
 Metrics currently created in this package:
-| Metric Namespace | SpeedTest Metric | Description |
-| - | - | - |
-| `Log Based Metrics` | `ST Ping Time`         | ping time as reported by SpeedTest |
-| `Log Based Metrics` | `ST Download Speed`    | download speed as reported by SpeedTest |
-| `Log Based Metrics` | `ST Upload Speed`      | upload speed time as reported by SpeedTest |
-| `Log Based Metrics` | `ST Servers Time`      | initial SpeedTest setup call time |
+| Metric Namespace    | SpeedTest Metric       | Description                                       |
+| ------------------- | ---------------------- | ------------------------------------------------- |
+| `Log Based Metrics` | `ST Ping Time`         | ping time as reported by SpeedTest                |
+| `Log Based Metrics` | `ST Download Speed`    | download speed as reported by SpeedTest           |
+| `Log Based Metrics` | `ST Upload Speed`      | upload speed time as reported by SpeedTest        |
+| `Log Based Metrics` | `ST Servers Time`      | initial SpeedTest setup call time                 |
 | `Log Based metrics` | `ST Best Servers Time` | time it took to get 'best servers' from SpeedTest |
-| `Log Based metrics` | `ST DNS Min`           | DNS Ping Time  metric |
-| `Log Based metrics` | `ST DNS StdDev`        | DNS Ping Time metric |
-| `Log Based metrics` | `ST DNS Avg`           | DNS Ping Time metric |
-| `Log Based metrics` | `ST DNS Max`           | DNS PIng Time metric |
+| `Log Based metrics` | `ST DNS Min`           | DNS Ping Time  metric                             |
+| `Log Based metrics` | `ST DNS StdDev`        | DNS Ping Time metric                              |
+| `Log Based metrics` | `ST DNS Avg`           | DNS Ping Time metric                              |
+| `Log Based metrics` | `ST DNS Max`           | DNS PIng Time metric                              |
 
 ## _log_ messages in Application Insight
 

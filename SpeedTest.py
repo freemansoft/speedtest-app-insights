@@ -3,10 +3,11 @@
 #
 # SPDX-License-Identifier: MIT
 #
-import speedtest
 import json
-import time
 import logging
+import time
+
+import speedtest
 
 # ---------------------------
 # TODO add DNS lookup timing
