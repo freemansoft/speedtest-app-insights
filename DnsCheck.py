@@ -6,17 +6,23 @@
 
 import ipaddress
 import socket
+import logging
 
 # these come from dnsdiag - we're making use of their internal modules
 import util.dns
 from util.dns import PROTO_UDP
 
-from AppInsights import *
+from AppInsights import (
+    load_insights_key,
+    push_azure_dns_metrics,
+    register_azure_exporter_with_tracer,
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("DnsUtil")
 
 # code based on https://github.com/farrokhi/dnsdiag/blob/master/dnseval.py
+
 
 # NOTE: future work - send this to application insights
 # TODO: This accepts a list of dns servers but returns after the first one
@@ -43,7 +49,9 @@ def ping_me(dns_server_list, query_host_name, should_force_miss):
         server = server.replace(" ", "")
         try:
             ipaddress.ip_address(server)
-        except ValueError:  # so it is not a valid IPv4 or IPv6 address, so try to resolve host name
+        except (
+            ValueError
+        ):  # not a valid IPv4 or IPv6 address, so try to resolve host name
             try:
                 resolver = socket.getaddrinfo(server, port=None)[1][4][0]
             except OSError:
