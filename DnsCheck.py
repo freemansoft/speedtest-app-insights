@@ -101,11 +101,11 @@ if __name__ == "__main__":
     )
 
     # sample times on FIOS DC and Medicom DE are
-    #     FIOS:     return_code:0     min=0.408       avg=0.500       max=0.730       std-dev=0.090
-    #     MediaCom: return_code:0     min=35.032      avg=37.418      max=39.587      std-dev=1.654
-    #     MediaCom: return_code:0     min=35.013      avg=42.450      max=59.062      std-dev=7.504
+    #  FIOS:     return_code:0  min=0.408  avg=0.500  max=0.730  std-dev=0.090
+    #  MediaCom: return_code:0  min=35.032 avg=37.418 max=39.587 std-dev=1.654
+    #  MediaCom: return_code:0  min=35.013 avg=42.450 max=59.062 std-dev=7.504
     logger.info(
-        "return_code:%d     min=%-8.3f    avg=%-8.3f    max=%-8.3f    std-dev=%-8.3f"
+        "return_code:%d   min=%-8.3f  avg=%-8.3f  max=%-8.3f  std-dev=%-8.3f"
         % (return_code, ping_min, ping_average, ping_max, ping_stddev)
     )
 

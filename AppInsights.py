@@ -59,7 +59,9 @@ def load_insights_key():
 # after this,
 # every log(warn) will end up in azure as a log event "trace" !"tracing"
 def register_azure_handler_with_logger(logger, azure_connection_string):
-    logger.addHandler(AzureLogHandler(connection_string=azure_connection_string))
+    logger.addHandler(
+        AzureLogHandler(connection_string=azure_connection_string)
+    )
 
 
 # Call to get an OpenCensus Tracer that is bound to Azure Application Insights
@@ -73,7 +75,9 @@ def register_azure_exporter_with_tracer(azure_connection_string):
 
 def _create_metric_measure(metric_name, metric_description, metric_unit):
     # The description of our metric
-    measure = measure_module.MeasureFloat(metric_name, metric_description, metric_unit)
+    measure = measure_module.MeasureFloat(
+        metric_name, metric_description, metric_unit
+    )
     return measure
 
 
@@ -102,11 +106,14 @@ def _create_metric_view(view_manager, name, description, measure):
 
 
 # after this, everything sent to this view will end up in azure as a metric
-def _register_azure_exporter_with_view_manager(view_manager, azure_connection_string):
+def _register_azure_exporter_with_view_manager(
+    view_manager, azure_connection_string
+):
     # enable the Azure metrics exporter which talks to Azure
     # standard metrics are CPU, memory, storage, etc.
     exporter = metrics_exporter.new_metrics_exporter(
-        enable_standard_metrics=False, connection_string=azure_connection_string
+        enable_standard_metrics=False,
+        connection_string=azure_connection_string,
     )
     view_manager.register_exporter(exporter)
 
@@ -136,7 +143,9 @@ def push_azure_speedtest_metrics(json_data, azure_connection_string):
         "get_servers_time", "Amount of time it took to get_servers()", "ms"
     )
     get_best_servers_measure = _create_metric_measure(
-        "get_best_servers_time", "Amount of time it took to get_best_servers()", "ms"
+        "get_best_servers_time",
+        "Amount of time it took to get_best_servers()",
+        "ms",
     )
     # we measure 3 different things so lets describe them
     ping_measure = _create_metric_measure(
@@ -187,12 +196,16 @@ def push_azure_speedtest_metrics(json_data, azure_connection_string):
         )
 
     # lets add the exporter and register our azure key with the exporter
-    _register_azure_exporter_with_view_manager(view_manager, azure_connection_string)
+    _register_azure_exporter_with_view_manager(
+        view_manager, azure_connection_string
+    )
 
     # views(measure, view)  events(measure,metric)
     # setup times
     _record_metric_float(mmap, json_data["get_servers"], get_servers_measure)
-    _record_metric_float(mmap, json_data["get_best_servers"], get_best_servers_measure)
+    _record_metric_float(
+        mmap, json_data["get_best_servers"], get_best_servers_measure
+    )
     # We always capture ping and sometimes upload or download
     _record_metric_float(mmap, json_data["ping"], ping_measure)
     if json_data["upload"] != 0:
@@ -222,9 +235,15 @@ def push_azure_dns_metrics(
     mmap = stats_recorder.new_measurement_map()
 
     # perf data gathered while running tests
-    ping_min_measure = _create_metric_measure("dns_min", "Minimum DNS time", "ms")
-    ping_avg_measure = _create_metric_measure("dns_avg", "Average DNS time", "ms")
-    ping_max_measure = _create_metric_measure("dns_max", "Maximum DNS time", "ms")
+    ping_min_measure = _create_metric_measure(
+        "dns_min", "Minimum DNS time", "ms"
+    )
+    ping_avg_measure = _create_metric_measure(
+        "dns_avg", "Average DNS time", "ms"
+    )
+    ping_max_measure = _create_metric_measure(
+        "dns_max", "Maximum DNS time", "ms"
+    )
     ping_stddev_measure = _create_metric_measure(
         "dns_stddev", "Standard Deviation DNS time", "ms"
     )
@@ -257,7 +276,9 @@ def push_azure_dns_metrics(
     )
 
     # lets add the exporter and register our azure key with the exporter
-    _register_azure_exporter_with_view_manager(view_manager, azure_connection_string)
+    _register_azure_exporter_with_view_manager(
+        view_manager, azure_connection_string
+    )
 
     # views(measure, view)  events(measure,metric)
     _record_metric_float(mmap, ping_min, ping_min_measure)
@@ -271,7 +292,7 @@ def push_azure_dns_metrics(
     return mmap
 
 
-# Used for testing this class - verify by lookin gin App Insights
+# Used for testing this class - verify by looking in App Insights
 # Only consumes sample data.  Do not use in REAL app
 def AppInsightsMain():
     # sample speedtest.net output json as a string
