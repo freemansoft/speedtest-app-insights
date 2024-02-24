@@ -5,6 +5,7 @@
 #
 import json
 import logging
+import sys
 import time
 
 import speedtest
@@ -18,6 +19,10 @@ import speedtest
 # do not name local python file same as import file - do not name speedtest.py
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+if __name__ == "__main__":
+    logger.error("You probably meant to run NetCheck.py")
+    sys.exit(-1)
 
 
 # ---------------------------------------------------
