@@ -3,16 +3,19 @@
 #
 # SPDX-License-Identifier: MIT
 #
-import logging
 import argparse
 import json
+import logging
+
+from opentelemetry.trace import Tracer
+
 from AppInsights import (
+    create_ot_tracer,
     load_insights_key,
     push_azure_speedtest_metrics,
-    register_azure_exporter_with_tracer,
-    register_azure_handler_with_logger,
+    register_azure_monitor,
 )
-from SpeedTest import run_test, Merge, write_json
+from SpeedTest import Merge, run_test, write_json
 
 # ---------------------------
 # TODO add DNS lookup timing
@@ -30,7 +33,7 @@ logger = logging.getLogger("NetCheck")
 # --------------------------------------------------
 parser = argparse.ArgumentParser(
     prog="NetCheck",
-    description="A Python Driver for the SpeedTest.net latency and throughput testing libraries.",
+    description="A Python Driver for SpeedTest.net latency and throughput.",
     epilog="Start your engines!",
 )
 parser.add_argument(
@@ -41,10 +44,17 @@ parser.add_argument(
     action="store_true",
 )
 parser.add_argument(
-    "-u", "--upload", default=False, help="include upload metrics", action="store_true"
+    "-u",
+    "--upload",
+    default=False,
+    help="include upload metrics",
+    action="store_true",
 )
 parser.add_argument(
-    "-o", "--outfile", type=argparse.FileType("wt"), help="write output to file as json"
+    "-o",
+    "--outfile",
+    type=argparse.FileType("wt"),
+    help="write output to file as json",
 )
 parser.add_argument(
     "-s",
@@ -69,12 +79,22 @@ if args.share:
     logger.info("result sharing enabled")
 
 azure_instrumentation_key = load_insights_key()
-# Enable opencensus tracing. Create a new tracer for every run / loop.
-tracer = register_azure_exporter_with_tracer(azure_instrumentation_key)
+# Enable tracing
+register_azure_monitor(
+    azure_connection_string=azure_instrumentation_key,
+    cloud_role_name="NetCheck.py",
+)
+# Need the actual tracer to do spans
+tracer: Tracer = create_ot_tracer()
 # ---------------------------------------------------
 # Run the test
 # ---------------------------------------------------
-results_speed, results_setup = run_test(args.upload, args.download, args.share, tracer)
+results_speed, results_setup = run_test(
+    should_download=args.upload,
+    should_upload=args.download,
+    should_share=args.share,
+    tracer=tracer,
+)
 # write out just the standard speedtest results
 write_json(results_speed, args.outfile)
 # augment the results with the setup times
@@ -89,13 +109,17 @@ push_azure_speedtest_metrics(results_combined, azure_instrumentation_key)
 if args.verbose:
     # Program exits after one execution
     # so only these log statements end up in Application insights.
-    register_azure_handler_with_logger(logger, azure_instrumentation_key)
-    logger.info('{ "combined_data": %s }', json.dumps(results_combined, sort_keys=True))
+    logger.info(
+        '{ "combined_data": %s }', json.dumps(results_combined, sort_keys=True)
+    )
     logger.debug(
-        "as json: %s", json.dumps(results_speed.dict(), indent=2, sort_keys=True)
+        "as json: %s",
+        json.dumps(results_speed.dict(), indent=2, sort_keys=True),
     )
     logger.debug(
         "as encoded string: %s", json.dumps(results_speed.json())
     )  # logs the entire object a singl json string
     logger.debug("as dictionary: %s", results_speed.dict())
-    logger.debug("as csv: %s\n%s", results_speed.csv_header(), results_speed.csv())
+    logger.debug(
+        "as csv: %s\n%s", results_speed.csv_header(), results_speed.csv()
+    )

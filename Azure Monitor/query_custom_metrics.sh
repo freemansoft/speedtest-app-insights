@@ -15,6 +15,10 @@ source ./api_config.ini
 # customMetrics | where name == "ST Download Rate" or name == "ST Upload Rate" | order by timestamp desc
 # customMetrics | summarize totalTime=sum(value) by name, bin(timestamp, 30m) | render timechart
 # customMetrics | where name == "ST Ping Time" | where timestamp > ago(4d) | summarize min(value), avg(value), max(value) by cloud_RoleInstance
+#
+# after the migration to open telemetry
+# customMetrics  | where name == "ST Upload Rate" or name == "ST Download Rate" or name == "st_upload_rate" or name == "st_download_rate"
+#
 # dependencies | where name == "main" |  top 10 by timestamp desc
 # dependencies | summarize totalCount=sum(itemCount) by bin(timestamp, 30m) | render timechart
 # dependencies | summarize totalCount=sum(itemCount) by name, bin(timestamp, 30m) | render timechart
