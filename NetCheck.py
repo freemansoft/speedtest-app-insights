@@ -83,6 +83,7 @@ azure_instrumentation_key = load_insights_key()
 register_azure_monitor(
     azure_connection_string=azure_instrumentation_key,
     cloud_role_name="NetCheck.py",
+    capture_logs=args.verbose,
 )
 # Need the actual tracer to do spans
 tracer: Tracer = create_ot_tracer()

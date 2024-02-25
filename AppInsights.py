@@ -30,7 +30,7 @@ from opentelemetry.trace import Tracer
 # log_prefix = os.path.basename(__file__) + ":"
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-# logging.getLogger("azure").setLevel(level=logging.WARNING)
+logging.getLogger("azure").setLevel(level=logging.WARNING)
 logging.getLogger("azure.core.pipeline.policies.http_logging_policy").setLevel(
     level=logging.WARNING
 )
@@ -56,7 +56,7 @@ def load_insights_key() -> str:
 # after this,
 # every log(warn) will end up in azure as a log event "trace" !"tracing"
 def register_azure_monitor(
-    azure_connection_string: str, cloud_role_name: str
+    azure_connection_string: str, cloud_role_name: str, capture_logs: bool = False
 ) -> None:
     # Cloud Role Name uses service.namespace and service.name attributes,
     #    it falls back to service.name if service.namespace isn't set.
@@ -68,7 +68,8 @@ def register_azure_monitor(
     #
     # Netchecks
     # 7 items sent with or without integrations enabled
-    os.environ[environment_variables.OTEL_LOGS_EXPORTER] = "none"
+    if not capture_logs:
+        os.environ[environment_variables.OTEL_LOGS_EXPORTER] = "none"
     # NetChecks
     # 4 traces , 6 if integrations are enabled
     # os.environ[environment_variables.OTEL_TRACES_EXPORTER] = "none"
