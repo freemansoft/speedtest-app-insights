@@ -9,6 +9,7 @@ import sys
 import time
 
 import speedtest
+from opentelemetry.trace import Tracer
 
 # ---------------------------
 # TODO add DNS lookup timing
@@ -28,8 +29,8 @@ if __name__ == "__main__":
 # ---------------------------------------------------
 # Actual speed test
 # ---------------------------------------------------
-def run_test(should_download, should_upload, should_share, tracer):
-    servers = []
+def run_test(should_download, should_upload, should_share, tracer: Tracer):
+    servers = None
     # If you want to test against a specific server
     # servers = [1234]
 
@@ -38,36 +39,38 @@ def run_test(should_download, should_upload, should_share, tracer):
     # threads = 1
 
     # Other Tracing spans will be children to this one
-    with tracer.span(name="main") as span:
+    with tracer.start_as_current_span(name="main"):
         # getting the servers does a ping
         s = speedtest.Speedtest(secure=1)
         logger.info("getting servers")
         tic = time.perf_counter()
-        with tracer.span(name="get_servers") as span:
-            s.get_servers(servers)
+        with tracer.start_as_current_span(name="get_servers"):
+            retrieved_servers = s.get_servers(servers=servers)
+            logger.debug(f"retrieved servers {retrieved_servers}")
         tac = time.perf_counter()
-        with tracer.span(name="get_best_servers") as span:
-            s.get_best_server()
+        with tracer.start_as_current_span(name="get_best_servers"):
+            retrieved_best_server = s.get_best_server(servers=servers)
+            logger.debug(f"retrieved best server is {retrieved_best_server}")
         toc = time.perf_counter()
 
         if should_download:
-            with tracer.span(name="measure_download") as span:
+            with tracer.start_as_current_span(name="measure_download"):
                 logger.info("running download test")
                 s.download(threads=threads)
         else:
             logger.info("skipping download test")
 
         if should_upload:
-            with tracer.span(name="measure_upload") as span:
+            with tracer.start_as_current_span(name="measure_upload"):
                 logger.info("running upload test")
                 s.upload(threads=threads)
         else:
             logger.info("skipping upload test")
 
         if should_share:
-            with tracer.span(name="sharing_is_caring") as span:
+            with tracer.start_as_current_span(name="sharing_is_caring"):
                 logger.info(
-                    "sharing results - results sharing may be broken 03/03/2021"
+                    "sharing results - sharing may be broken 03/03/2021"
                 )
                 s.results.share()
 
