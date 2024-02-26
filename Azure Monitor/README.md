@@ -1,6 +1,13 @@
-This is an experimentation area for accessing Applicaton Insights via the web API.
+# Exmaple program that Pushes metrics, logs and traces to Applicaton Insights via Open Telemetry
 
-# Setup
+Previous versions used OpenCensus
+
+## Changelog
+
+* 2.0.0 - First version with OpenTelemetry
+* Unversioned - OpenCensus version - no version info
+
+## Setup
 
 These steps will create an API key in your applicaton instance and generate a config file with the needed key/value pairs
 
@@ -11,7 +18,7 @@ These steps will create an API key in your applicaton instance and generate a co
     1. This creates an api key with the key name specified in `instance_config.sh`.
     1. This can only be run once because the key by that name will already exist for the 2nd run
 
-# Demo
+## Demo
 
 Retreive custom metrics using the configs created in above. There are a couple queries in the shell script.
 
@@ -20,9 +27,9 @@ Retreive custom metrics using the configs created in above. There are a couple q
         1. Values you **manually** inserted in `instance_config.ini`
         1. App Instance specific values that were script generated into `app_config.ini`
 
-# Sample Data
+## Sample Data
 
-## A Query
+### A Query
 
 This query requires credentials.  I added a `X-Api-Key` header with an access token to my requests. It coul have also been added as a query parameter.
 
@@ -57,11 +64,11 @@ graph
     end
 ```
 
-## Sample M5Flow/UiFlow App
+### Sample M5Flow/UiFlow App
 
 The [Sample AppInsights Python App built with UiFlow / M5Flow](Sample-AppInsightsUiFlow.m5f)runs a specific query against specified Applicaton Insights instances.
 
-## Query Results
+### Query Results
 
 Our query only has a single table.  The table contains column metadata and rows of data. You can find a similar result in [SampleQueryResults.json](SampleQueryResults.json)
 
@@ -85,7 +92,7 @@ Our query only has a single table.  The table contains column metadata and rows 
 }
 ```
 
-## Column Section of a Table
+### Column Section of a Table
 
 The column metadata section describes the columns.
 
@@ -98,7 +105,7 @@ The column metadata section describes the columns.
 ]
 ```
 
-## Row Data Section of a Table
+### Row Data Section of a Table
 
 The row section contains the actual query results.
 
@@ -119,14 +126,19 @@ Our query returned the data for two devices, on different networks in this case
 ["pi-153a3987b", 4.95, 6.448292, 8.023]
 ```
 
-# References
+## References
 
-## Applicaton Insights REST API
+### Application Insights and OpenTelemetry
+
+* <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-python-opencensus-migrate?tabs=aspnetcore>
+* <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-add-modify>
+
+### Applicaton Insights REST API
 
 * <https://learn.microsoft.com/en-us/azure/azure-monitor/logs/api/overview>
 * <https://learn.microsoft.com/en-us/rest/api/application-insights/query/get?tabs=HTTP>
 
-## Kusto Query language
+### Kusto Query language
 
 * <https://learn.microsoft.com/en-us/azure/azure-monitor/logs/basic-logs-query?tabs=portal-1>
 * <https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/samples?pivots=azuremonitor>

@@ -1,5 +1,7 @@
 # Capturing speedtest.net data in Azure App Insights
 
+The labels for the open telemtry version are those than from the privous version.  They are **lower case** and have **spaces repalced with underscores**
+
 ## Purpose
 
 This project captures internet connection statistics and sends them to an Azure dashboard.
