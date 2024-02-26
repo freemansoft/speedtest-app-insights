@@ -143,3 +143,7 @@ Our query returned the data for two devices, on different networks in this case
 * <https://learn.microsoft.com/en-us/azure/azure-monitor/logs/basic-logs-query?tabs=portal-1>
 * <https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/samples?pivots=azuremonitor>
 * <https://ds.squaredup.com/blog/aggregating-and-visualizing-data-with-kusto/>
+
+### Versioning
+
+* Versioning follows the style here <https://stackoverflow.com/questions/72357031/set-version-of-module-from-a-file-when-configuring-setuptools-using-setup>
