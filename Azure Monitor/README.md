@@ -128,10 +128,27 @@ Our query returned the data for two devices, on different networks in this case
 
 ## References
 
+### Application Insights
+
+* Azure App Insights docs
+  * <https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-workspace-resource>
+  * <https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource>
+* Azure Dashboard
+  * <https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents>
+
 ### Application Insights and OpenTelemetry
 
-* <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-python-opencensus-migrate?tabs=aspnetcore>
-* <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-add-modify>
+* Open Telemetry
+  * <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-python-opencensus-migrate?tabs=aspnetcore>
+  * <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-add-modify>
+  * <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-configuration>
+
+### Application Insights and OpenCensus
+
+* App Insights Open Census Python exporter
+  * <https://docs.microsoft.com/en-us/azure/azure-monitor/app/opencensus-python>
+  * <https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure>
+  * <https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py>
 
 ### Applicaton Insights REST API
 

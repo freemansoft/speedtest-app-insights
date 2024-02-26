@@ -142,15 +142,6 @@ Some Raspberry Pi models are speed limited on their ethernet. magpi posted [ethe
 
 * Speedtest Python library
   * <https://github.com/sivel/speedtest-cli>
-* Azure App Insights docs
-  * <https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-workspace-resource>
-  * <https://docs.microsoft.com/en-us/azure/azure-monitor/app/opencensus-python>
-  * <https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource>
-* App Insights Open Census Python exporter
-  * <https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure>
-  * <https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py>
-* Azure Dashboard
-  * <https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents>
 
 ## Experimental Features
 
