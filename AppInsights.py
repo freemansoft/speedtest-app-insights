@@ -56,7 +56,9 @@ def load_insights_key() -> str:
 # after this,
 # every log(warn) will end up in azure as a log event "trace" !"tracing"
 def register_azure_monitor(
-    azure_connection_string: str, cloud_role_name: str, capture_logs: bool = False
+    azure_connection_string: str,
+    cloud_role_name: str,
+    capture_logs: bool = False,
 ) -> None:
     # Cloud Role Name uses service.namespace and service.name attributes,
     #    it falls back to service.name if service.namespace isn't set.

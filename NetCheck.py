@@ -91,8 +91,8 @@ tracer: Tracer = create_ot_tracer()
 # Run the test
 # ---------------------------------------------------
 results_speed, results_setup = run_test(
-    should_download=args.upload,
-    should_upload=args.download,
+    should_download=args.download,
+    should_upload=args.upload,
     should_share=args.share,
     tracer=tracer,
 )

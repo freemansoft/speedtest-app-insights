@@ -1,6 +1,8 @@
 # Capturing speedtest.net data in Azure App Insights
 
-The labels for the open telemtry version are those than from the privous version.  They are **lower case** and have **spaces repalced with underscores**
+## Known issues
+
+1. The labels for the open telemtry version are those than from the previous version. This is because of the way the OpenTelemetry specification says labels are case insensitive and the Python API converts all labels to **lower case** with **spaces replaced with underscores**. The OpenTelemetry Python team may change the casing part of this in the future see <https://github.com/open-telemetry/opentelemetry-python/issues/3207> This _may_ be fixible by using views in the same way we did with OpenCensus
 
 ## Purpose
 
