@@ -8,12 +8,13 @@
 #
 # You can run this script as many times as you wish. It will UPDATE any previous entry.
 
+# Run from the root directory to pick up the config files
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 #echo $DIR
 Me=`whoami`
 
 # Can add NetCheck.py options to OPTIONS: --verbose or --download or --upload
-PYTHON_SCRIPT="NetCheck.py"
+PYTHON_SCRIPT="src/NetCheck.py"
 
 OPTIONS_PING_IT=""
 OPTIONS_UP_DOWN="--upload --download"
