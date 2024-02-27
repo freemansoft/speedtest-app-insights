@@ -150,6 +150,10 @@ Our query returned the data for two devices, on different networks in this case
   * <https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure>
   * <https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py>
 
+### OpenTelemetry
+
+* <https://opentelemetry-python.readthedocs.io/en/latest/sdk/environment_variables.html>
+
 ### Applicaton Insights REST API
 
 * <https://learn.microsoft.com/en-us/azure/azure-monitor/logs/api/overview>
@@ -161,6 +165,6 @@ Our query returned the data for two devices, on different networks in this case
 * <https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/samples?pivots=azuremonitor>
 * <https://ds.squaredup.com/blog/aggregating-and-visualizing-data-with-kusto/>
 
-### Versioning
+### Python Versioning
 
 * Versioning follows the style here <https://stackoverflow.com/questions/72357031/set-version-of-module-from-a-file-when-configuring-setuptools-using-setup>

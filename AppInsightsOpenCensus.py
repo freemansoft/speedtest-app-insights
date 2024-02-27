@@ -4,12 +4,15 @@
 # SPDX-License-Identifier: MIT
 #
 #
+# THIS OpenCensus CODE IS NO LONGER USED
+# and is retained for comparison to the OpenTelemetry code
+#
 # Build metrics from the data reported by speedtest and passed in.
 # Can also register a logger to export logs to Application Insights
 #
-#
 # This code is a useful example but is
 # hardcoded to specific fields when called as a function library
+#
 import configparser
 import json
 

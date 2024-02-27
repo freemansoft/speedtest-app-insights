@@ -5,7 +5,7 @@
 #
 #
 # Build metrics from the data reported by speedtest and passed in.
-# Can also register a logger to export logs to Application Insights
+# Can also enable a logger to export logs to Application Insights
 #
 #
 # This code is a useful example but is
@@ -30,6 +30,8 @@ from opentelemetry.trace import Tracer
 # log_prefix = os.path.basename(__file__) + ":"
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+# The azure library logging is at INFO which would then send it to Azure
+# if log capture is enabled
 logging.getLogger("azure").setLevel(level=logging.WARNING)
 logging.getLogger("azure.core.pipeline.policies.http_logging_policy").setLevel(
     level=logging.WARNING
@@ -79,7 +81,9 @@ def register_azure_monitor(
     # 3 metrics, 5 if integrations are enabled
     # os.environ[environment_variables.OTEL_METRICS_EXPORTER] = "none"
     #
-    # really only interested in urllib
+    # Upload and download operations involve multiple HTTP packets which
+    # are all captured as metrics, traces and logs if we leave
+    # the urllib integration enabled
     os.environ["OTEL_PYTHON_DISABLED_INSTRUMENTATIONS"] = (
         "azure_sdk,django,fastapi,flask,psycopg2,urllib,urllib3"
     )
