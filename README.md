@@ -1,8 +1,18 @@
 # Capturing speedtest.net data in Azure App Insights
 
+This version uses OpenTelemetry. Initial versions used OpenCensus
+
+## Changelog
+
+* 2.0.0 - First version with OpenTelemetry
+* Unversioned - OpenCensus version - no version info
+
 ## Known issues
 
 1. The labels for the open telemtry version are those than from the previous version. This is because of the way the OpenTelemetry specification says labels are case insensitive and the Python API converts all labels to **lower case** with **spaces replaced with underscores**. The OpenTelemetry Python team may change the casing part of this in the future see <https://github.com/open-telemetry/opentelemetry-python/issues/3207> This _may_ be fixible by using views in the same way we did with OpenCensus
+2. The `--verbose` flag co-mingles the notion of more output and log routing to ApplicationMonitor
+3. This application disables automatic integrations because the metrics and traces are the end product and do not exist as KPIs and diagnostics as part of some greater application.
+4. This application does not demonstrate cross call tracing identifiers because they weren't needed
 
 ## Purpose
 

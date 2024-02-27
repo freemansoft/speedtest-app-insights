@@ -1,11 +1,6 @@
 # Exmaple program that Pushes metrics, logs and traces to Applicaton Insights via Open Telemetry
 
-Previous versions used OpenCensus
-
-## Changelog
-
-* 2.0.0 - First version with OpenTelemetry
-* Unversioned - OpenCensus version - no version info
+MOnitor configuration and sample directory
 
 ## Setup
 
