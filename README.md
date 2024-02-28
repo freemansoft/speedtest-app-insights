@@ -85,9 +85,9 @@ This project captures internet connection statistics and sends them to an Azure 
     ```
 
 1. Run main program `NetCheck.py` There are several options
-    1. Run with only a ping check `python3 NetCheck.py`
-    1. Run with ping, upload and download `python3 NetCheck.py --download --upload`
-    1. Get help with `NetCheck.py --help`
+    1. Run with only a ping check `python3 src/NetCheck.py`
+    1. Run with ping, upload and download `python3 src/NetCheck.py --download --upload`
+    1. Get help with `python3 src/NetCheck.py --help`
 
 ### Optional
 
