@@ -111,7 +111,8 @@ if args.verbose:
     # Program exits after one execution
     # so only these log statements end up in Application insights.
     logger.info(
-        '{ "combined_data": %s }', json.dumps(results_combined, sort_keys=True)
+        '{ "combined_data": %s }',
+        json.dumps(results_combined, sort_keys=True, indent=4),
     )
     logger.debug(
         "as json: %s",

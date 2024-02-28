@@ -126,17 +126,16 @@ Our query returned the data for two devices, on different networks in this case
 ### Application Insights
 
 * Azure App Insights docs
-  * <https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-workspace-resource>
-  * <https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource>
+  * [Create an Azure Monitor workspace resource](https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-workspace-resource)
+  * [Create Azure Monitor Resource](https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource)
 * Azure Dashboard
   * <https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents>
 
 ### Application Insights and OpenTelemetry
 
-* Open Telemetry
-  * <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-python-opencensus-migrate?tabs=aspnetcore>
-  * <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-add-modify>
-  * <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-configuration>
+* <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-python-opencensus-migrate?tabs=aspnetcore>
+* <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-add-modify>
+* <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-configuration>
 
 ### Application Insights and OpenCensus
 
@@ -145,8 +144,9 @@ Our query returned the data for two devices, on different networks in this case
   * <https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure>
   * <https://github.com/census-instrumentation/opencensus-python/blob/master/contrib/opencensus-ext-azure/opencensus/ext/azure/common/utils.py>
 
-### OpenTelemetry
+### OpenTelemetry Python SDK
 
+* [Opten Telemetry Semantic Conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md)
 * <https://opentelemetry-python.readthedocs.io/en/latest/sdk/environment_variables.html>
 
 ### Applicaton Insights REST API
@@ -162,4 +162,4 @@ Our query returned the data for two devices, on different networks in this case
 
 ### Python Versioning
 
-* Versioning follows the style here <https://stackoverflow.com/questions/72357031/set-version-of-module-from-a-file-when-configuring-setuptools-using-setup>
+* [Versioning follows the style here](https://stackoverflow.com/questions/72357031/set-version-of-module-from-a-file-when-configuring-setuptools-using-setup)

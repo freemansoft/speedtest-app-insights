@@ -62,25 +62,33 @@ def register_azure_monitor(
     cloud_role_name: str,
     capture_logs: bool = False,
 ) -> None:
-    # Cloud Role Name uses service.namespace and service.name attributes,
+    # From <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-configuration?tabs=python>
+    # Cloud Role Name
+    #    uses service.namespace and service.name attributes,
     #    it falls back to service.name if service.namespace isn't set.
-    #    actually is concatenated ${service.namespace}.${service.name}
-    # Cloud Role Instance uses the service.instance.id attribute value.
+    #    Note: is ${service.namespace}.${service.name} if both exist
+    # Cloud Role Instance
+    #   uses the service.instance.id attribute value.
     os.environ["OTEL_RESOURCE_ATTRIBUTES"] = f"service.name={cloud_role_name}"
+    # In case you wanted to be even more confused, you can instead use
+    # OTEL_SERVICE_NAME instead of OTEL_RESOURCE_ATTRIBUTES: service.name
     #
     # Disable exporters by setting these variables to "none"
     #
     # Netchecks
-    # 7 items sent with or without integrations enabled
+    # 7 items logged with or without integrations enabled
     if not capture_logs:
         os.environ[environment_variables.OTEL_LOGS_EXPORTER] = "none"
     # NetChecks
-    # 4 traces , 6 if integrations are enabled
+    # 4 traces logged , 6 if integrations are enabled
     # os.environ[environment_variables.OTEL_TRACES_EXPORTER] = "none"
     # NetChecks
-    # 3 metrics, 5 if integrations are enabled
+    # 3 metrics logged, 5 if integrations are enabled
     # os.environ[environment_variables.OTEL_METRICS_EXPORTER] = "none"
     #
+    # Traces can be sampled, We want all our traces.
+    # os.environ["OTEL_TRACES_SAMPLER_ARG"]=1.0
+
     # Upload and download operations involve multiple HTTP packets which
     # are all captured as metrics, traces and logs if we leave
     # the urllib integration enabled
