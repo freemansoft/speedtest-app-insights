@@ -158,9 +158,13 @@ Individual _traces_ can also be seen under _Monitoring / Logs_
 
 You can use the _Performance_ dashboard to see span timing information.
 
-* Drill down into an individual call chain by clicking on _Samples_ in the bottom right corner
+* Click on _Performance_ on the left.
+* Open the list of traces/sample by clicking on _Samples_ in the bottom right corner
+* Drill down into an individual call chain by double clicking on a transaction in the list on the right
 
 ![App Insights - Transactions and Spans as Dependencies](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiStN9u6nAuHS1G_r3fyEmPD7x_u36qtaWkfGCt7b4N67zDvNDzAUSVMs7wQZFo4_73Vanh92ewp8ygrNZoEJR3kRW0K7RYiZSE8idbiCu6odQpzpPHoCtdE3NK6NhRwnFO5OZrssTPj6lFGfg7B49_xi2ttAz5heqjzukd07RqsWPpA5dOhKU2jqGr4A/s16000/python-span-trans-end-to-end.png)
+
+* Other resources
 
 [App Insights - Transactions Spans with Open Census Blog Article](https://joe.blog.freemansoft.com/2022/11/querying-python-transactions-and-spans.html)
 _________________________________________________
