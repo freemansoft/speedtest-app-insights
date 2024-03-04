@@ -11,7 +11,7 @@
 # Run from the root directory to pick up the config files
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # scripts are in Linux-install so strip that
-DIR= `dirname $DIR`
+DIR=`dirname $DIR`
 #echo $DIR
 Me=`whoami`
 
