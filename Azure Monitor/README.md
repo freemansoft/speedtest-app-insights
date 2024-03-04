@@ -1,6 +1,6 @@
-# Exmaple program that Pushes metrics, logs and traces to Applicaton Insights via Open Telemetry
+# Example program that Pushes metrics, logs and traces to Applicaton Insights via Open Telemetry
 
-MOnitor configuration and sample directory
+Configure the program for application insights and run queries against the captured data.
 
 ## Setup
 

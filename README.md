@@ -99,6 +99,15 @@ This project captures internet connection statistics and sends them to an Azure 
 1. Verify the cycle times you wish in `2-install-crontab.sh`.  The file is in crontab format.
 1. run `2-install-crontab.sh`
 
+Sample `crontab -l` output after installing the crontab
+
+```bash
+pi@pi-153a3987b:~/Documents/speedtest-app-insights $ crontab -l
+*/3 * * * * cd /home/pi/Documents/speedtest-app-insights && python3 NetCheck.py
+13 */4 * * * cd /home/pi/Documents/speedtest-app-insights && python3 NetCheck.py --upload --download
+*/6 * * * * cd /home/pi/Documents/speedtest-app-insights && python3 DnsCheck.py
+```
+
 ## Example speedtest.net cli output
 
 Raspberry Pi3 on 1GB port on 1GB FIOS internet service.

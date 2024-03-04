@@ -17,5 +17,12 @@ PYTHON_SCRIPT="NetCheck.py"
 
 echo "Removing crontab entries for $PYTHON_SCRIPT"
 (crontab -l | grep -v -F $PYTHON_SCRIPT) | crontab -
+
+# Can add NetCheck.py options to OPTIONS: --verbose or --download or --upload
+PYTHON_SCRIPT="NetCDnsCheckheck.py"
+
+echo "Removing crontab entries for $PYTHON_SCRIPT"
+(crontab -l | grep -v -F $PYTHON_SCRIPT) | crontab -
+
 echo "New crontab for '$Me' is:"
 crontab -l
