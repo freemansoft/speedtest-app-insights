@@ -102,6 +102,9 @@ def register_azure_monitor(
     # not sure what value to put here
     # os.environ[environment_variables.LOGGER_NAME_ARG] = "__name__"
 
+    # we accept the default aggregator which is last value for gauges
+    # instrument_name are all lower case in OT - mixed case is toLowerCase()
+    # name are the view name which can be mixed case with spaces
     _st_servers_time_view = SdkView(
         instrument_name="st_servers_time",
         name="ST Servers Time",
