@@ -124,8 +124,8 @@ Metrics currently created in this package:
 | Metric Namespace    | SpeedTest Metric       | Description                                       |
 | ------------------- | ---------------------- | ------------------------------------------------- |
 | `Log Based Metrics` | `ST Ping Time`         | ping time as reported by SpeedTest                |
-| `Log Based Metrics` | `ST Download Speed`    | download speed as reported by SpeedTest           |
-| `Log Based Metrics` | `ST Upload Speed`      | upload speed time as reported by SpeedTest        |
+| `Log Based Metrics` | `ST Download Rate`     | download speed as reported by SpeedTest           |
+| `Log Based Metrics` | `ST Upload Rate`       | upload speed time as reported by SpeedTest        |
 | `Log Based Metrics` | `ST Servers Time`      | initial SpeedTest setup call time                 |
 | `Log Based metrics` | `ST Best Servers Time` | time it took to get 'best servers' from SpeedTest |
 | `Log Based metrics` | `ST DNS Min`           | DNS Ping Time  metric                             |

@@ -25,6 +25,9 @@ from azure.monitor.opentelemetry import configure_azure_monitor
 # Import the tracing api from the `opentelemetry` package.
 from opentelemetry import environment_variables, metrics, trace
 from opentelemetry.metrics import Meter
+
+# https://opentelemetry-python.readthedocs.io/en/latest/sdk/metrics.view.html
+from opentelemetry.sdk.metrics.view import View as SdkView
 from opentelemetry.trace import Tracer
 
 # log_prefix = os.path.basename(__file__) + ":"
@@ -62,7 +65,7 @@ def register_azure_monitor(
     cloud_role_name: str,
     capture_logs: bool = False,
 ) -> None:
-    # From <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-configuration?tabs=python>
+    # From <https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-configuration?tabs=python> # noqa: E501
     # Cloud Role Name
     #    uses service.namespace and service.name attributes,
     #    it falls back to service.name if service.namespace isn't set.
@@ -99,9 +102,67 @@ def register_azure_monitor(
     # not sure what value to put here
     # os.environ[environment_variables.LOGGER_NAME_ARG] = "__name__"
 
+    _st_servers_time_view = SdkView(
+        instrument_name="st_servers_time",
+        name="ST Servers Time",
+        description="get servers",
+    )
+    _st_best_servers_time_view = SdkView(
+        instrument_name="st_best_servers_time",
+        name="ST Best Servers Time",
+        description="get best servers",
+    )
+    _st_ping_time_view = SdkView(
+        instrument_name="st_ping_time",
+        name="ST Ping Time",
+        description="last ping",
+    )
+    _upload_view = SdkView(
+        instrument_name="st_upload_rate",
+        name="ST Upload Rate",
+        description="last upload",
+    )
+    _download_view = SdkView(
+        instrument_name="st_download_rate",
+        name="ST Download Rate",
+        description="last download",
+    )
+
+    _st_dns_min_view = SdkView(
+        instrument_name="st_dns_min",
+        name="ST DNS Min",
+        description="DNS ping min time",
+    )
+    _st_dns_avg_view = SdkView(
+        instrument_name="st_dns_avg",
+        name="ST DNS Avg",
+        description="DNS ping average time",
+    )
+    _st_dns_max_view = SdkView(
+        instrument_name="st_dns_max",
+        name="ST DNS Max",
+        description="DNS ping max time",
+    )
+    _st_dns_stddev_view = SdkView(
+        instrument_name="st_dns_stdavg",
+        name="ST DNS StdDev",
+        description="DNS ping standard deviation",
+    )
+
     configure_azure_monitor(
         connection_string=azure_connection_string,
         disable_offline_storage=True,
+        views=[
+            _st_servers_time_view,
+            _st_best_servers_time_view,
+            _st_ping_time_view,
+            _upload_view,
+            _download_view,
+            _st_dns_min_view,
+            _st_dns_avg_view,
+            _st_dns_max_view,
+            _st_dns_stddev_view,
+        ],
     )
 
 
