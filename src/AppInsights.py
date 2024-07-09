@@ -104,6 +104,7 @@ def register_azure_monitor(
 
     # we accept the default aggregator which is last value for gauges
     # instrument_name are all lower case in OT - mixed case is toLowerCase()
+    # The instrument_name must exactly match the lower case gauge name
     # name are the view name which can be mixed case with spaces
     _st_servers_time_view = SdkView(
         instrument_name="st_servers_time",
@@ -147,7 +148,7 @@ def register_azure_monitor(
         description="DNS ping max time",
     )
     _st_dns_stddev_view = SdkView(
-        instrument_name="st_dns_stdavg",
+        instrument_name="st_dns_stddev",
         name="ST DNS StdDev",
         description="DNS ping standard deviation",
     )
@@ -197,6 +198,8 @@ def push_azure_speedtest_metrics(json_data, azure_connection_string):
     meter = create_ot_meter(
         meter_name="SpeedTest", azure_connection_string=load_insights_key()
     )
+
+    # names are all tolower() by OT.  Left them multi cased, I don't know why
 
     # perf data gathered while running the test
     get_servers_gauge = meter.create_gauge(
