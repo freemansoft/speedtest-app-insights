@@ -133,6 +133,14 @@ Metrics currently created in this package:
 | `Log Based metrics` | `ST DNS Avg`           | DNS Ping Time metric                              |
 | `Log Based metrics` | `ST DNS Max`           | DNS PIng Time metric                              |
 
+### Sample metrics queries
+
+```ksql
+customMetrics | where cloud_RoleInstance == "Powerspec-g708"
+customMetrics  | where name == "ST Upload Rate" or name == "ST Download Rate"
+
+```
+
 ## _log_ messages in Application Insight
 
 The program can send a single line of output per run to the ApplicationInsights as `traces` in the Log export query screens

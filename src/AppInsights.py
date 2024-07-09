@@ -102,10 +102,23 @@ def register_azure_monitor(
     # not sure what value to put here
     # os.environ[environment_variables.LOGGER_NAME_ARG] = "__name__"
 
+    # coiuld inject the views but this easier for this simple program
+    _views = defineNetCheckViews() + defineDnsCheckViews()
+
+    configure_azure_monitor(
+        connection_string=azure_connection_string,
+        disable_offline_storage=True,
+        views=_views,
+    )
+
+
+# Views aligned with NetCheck.py
+def defineNetCheckViews() -> list[SdkView]:
     # we accept the default aggregator which is last value for gauges
     # instrument_name are all lower case in OT - mixed case is toLowerCase()
     # The instrument_name must exactly match the lower case gauge name
     # name are the view name which can be mixed case with spaces
+
     _st_servers_time_view = SdkView(
         instrument_name="st_servers_time",
         name="ST Servers Time",
@@ -132,6 +145,23 @@ def register_azure_monitor(
         description="last download",
     )
 
+    views = [
+        _st_servers_time_view,
+        _st_best_servers_time_view,
+        _st_ping_time_view,
+        _upload_view,
+        _download_view,
+    ]
+    return views
+
+
+# Views aligned with DnsCheck.py
+def defineDnsCheckViews() -> list[SdkView]:
+    # we accept the default aggregator which is last value for gauges
+    # instrument_name are all lower case in OT - mixed case is toLowerCase()
+    # The instrument_name must exactly match the lower case gauge name
+    # name are the view name which can be mixed case with spaces
+
     _st_dns_min_view = SdkView(
         instrument_name="st_dns_min",
         name="ST DNS Min",
@@ -153,21 +183,13 @@ def register_azure_monitor(
         description="DNS ping standard deviation",
     )
 
-    configure_azure_monitor(
-        connection_string=azure_connection_string,
-        disable_offline_storage=True,
-        views=[
-            _st_servers_time_view,
-            _st_best_servers_time_view,
-            _st_ping_time_view,
-            _upload_view,
-            _download_view,
-            _st_dns_min_view,
-            _st_dns_avg_view,
-            _st_dns_max_view,
-            _st_dns_stddev_view,
-        ],
-    )
+    views = [
+        _st_dns_min_view,
+        _st_dns_avg_view,
+        _st_dns_max_view,
+        _st_dns_stddev_view,
+    ]
+    return views
 
 
 # Returns a meter that gauges can be connected to
