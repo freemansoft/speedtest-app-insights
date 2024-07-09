@@ -52,7 +52,7 @@ crontab -l
 #sudo apt-get install postfix
 
 # this really isn't ready for primetime
-DNS_SCRIPT="DnsCheck.py"
+DNS_SCRIPT="srce/DnsCheck.py"
 CRONTAB_LINE_DNS="$MINUTES_DNS_IT $HOURS_DNS_IT $DAYS_OF_MONTH * $DAYS_OF_WEEK cd $DIR && python3 $DNS_SCRIPT $REDIRECT_LOGS"
 (crontab -l | grep -v -F $DNS_SCRIPT ; echo "$CRONTAB_LINE_DNS" ) | crontab -
 echo "New crontab for '$Me' is"
