@@ -15,6 +15,7 @@ This version uses OpenTelemetry. Initial versions used OpenCensus
 2. The `--verbose` flag co-mingles the notion of more output and log routing to ApplicationMonitor
 3. This application disables automatic integrations because the metrics and traces are the end product and do not exist as KPIs and diagnostics as part of some greater application.
 4. This application does not demonstrate cross call tracing identifiers because they weren't needed
+5. This should all be stuffed into a docker container. Crontab would probably execute the container with an `-exec` flag.
 
 ## Purpose
 
@@ -174,6 +175,23 @@ This module uses dnspython to do a dns check. I found that my network experience
 
 It should install fine but you can see in 1-setup-host.sh that there is a bit of overhead to get this working
 because it depends on a library that is best installed from git.
+
+## Running on Asustor NAS devices
+
+You will need to install the following O/S packages on any Asustor.
+
+1. Enable `ssh` in `Services`
+2. Install the following using `App Central`
+   1. `Shell In A Box` to have a browser based shell to run commands
+   2. `Python 3`
+   3. `git` whcih will install `Perl`
+   4. Install `entware` the `opkg` manager
+3. install bash using `opkg` that was installed with `entware`
+   1. `opkg install bash`
+
+Then you can follow the speed monitoring program using the steps abovbe
+
+1. You may have to `sudo su` in an Asustor shell before you can run the `Linux-install/2-install-crontab` in that shell and then run the script with `/opt/bin/bash` which is not on the superuser's path.
 
 ## Release Notes
 
